@@ -15,6 +15,49 @@ import runServer from './server.js';
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
 // TIP: If you open your Battlesnake URL in a browser you should see this data
+function info(idx = 0) { 
+
+  console.log("INFO"); 
+
+
+
+  const snakeInfos = [ 
+
+      { 
+
+          apiversion: "1", 
+
+          author: "Anastasia", // TODO: Your Battlesnake Username 
+
+          color: "#3E338F", // TODO: Choose color 
+
+          head: "smile", // TODO: Choose head 
+
+          tail: "default", // TODO: Choose tail 
+
+      }, 
+
+      { 
+
+          apiversion: "1", 
+
+          author: "Sofia", // TODO: Your Battlesnake Username 
+
+          color: "#FF0000", // TODO: Choose color 
+
+          head: "smile", // TODO: Choose head 
+
+          tail: "curled", // TODO: Choose tail 
+
+      }, 
+
+  ]; 
+
+
+
+  return snakeInfos[idx]; 
+
+} 
 function info() {
   console.log("INFO");
 
