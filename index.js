@@ -1,5 +1,16 @@
+// Welcome to
+// __________         __    __  .__                               __
+// \______   \_____ _/  |__/  |_|  |   ____   ______ ____ _____  |  | __ ____
+//  |    |  _/\__  \\   __\   __\  | _/ __ \ /  ___//    \\__  \ |  |/ // __ \
+//  |    |   \ / __ \|  |  |  | |  |_\  ___/ \___ \|   |  \/ __ \|    <\  ___/
+//  |________/(______/__|  |__| |____/\_____>______>___|__(______/__|__\\_____>
+//
+// This file can be a nice home for your Battlesnake logic and helper functions.
+//
+// To get you started we've included code to prevent your Battlesnake from moving backwards.
+// For more info see docs.battlesnake.com
+
 import runServer from './server.js';
-import chalk from 'chalk';
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
@@ -79,33 +90,7 @@ function move(gameState) {
   // food = gameState.board.food;
 
   console.log(`MOVE ${gameState.turn}: ${nextMove}`)
-//  console.log(gameState);
-  printBoard(gameState.board)
   return { move: nextMove };
-}
-
-function printBoard(board){
-  for(let row = 0; row<board.height; row++){
-    let lineToPrint = "";
-    for(let column = 0; column<board.width; column++){
-      let characterToPrint = " . ";//Empty
-      if(hasObjectInPosition(board.food, column, row))
-        characterToPrint = "🍔";//Food
-      else if(hasObjectInPosition(board.hazards, column, row))
-        characterToPrint = "⚠️";//Hazard
-      board.snakes.forEach(snake => {
-        const snakeChalk = chalk.bgHex(snake.customizations.color)
-        if(hasObjectInPosition(snake.body, column, row))
-          characterToPrint = snakeChalk("🐍");//Snake
-      });
-      lineToPrint += characterToPrint;
-    }
-    console.log(chalk.bgBlueBright(lineToPrint));
-  }
-}
-
-function hasObjectInPosition(arr, x, y){
-  return !!arr.find(ob => ob.x===x && ob.y===y);
 }
 
 runServer({
