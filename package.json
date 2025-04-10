@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky",
+    "start": "node index.js",
+    "play": "battlesnake\\battlesnake.exe play -W 11 -H 11 --name 'Test' --url http://localhost:8000 -g solo --browser",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,6 +19,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "nodemon": "^3.1.9"
   }
 }

@@ -1,75 +1,29 @@
-// Welcome to
-// __________         __    __  .__                               __
-// \______   \_____ _/  |__/  |_|  |   ____   ______ ____ _____  |  | __ ____
-//  |    |  _/\__  \\   __\   __\  | _/ __ \ /  ___//    \\__  \ |  |/ // __ \
-//  |    |   \ / __ \|  |  |  | |  |_\  ___/ \___ \|   |  \/ __ \|    <\  ___/
-//  |________/(______/__|  |__| |____/\_____>______>___|__(______/__|__\\_____>
-//
-// This file can be a nice home for your Battlesnake logic and helper functions.
-//
-// To get you started we've included code to prevent your Battlesnake from moving backwards.
-// For more info see docs.battlesnake.com
+const { runServer } = require('./server');
+const { exec } = require('child_process');
 
-import runServer from "./server.js";
-
-// info is called when you create your Battlesnake on play.battlesnake.com
-// and controls your Battlesnake's appearance
-// TIP: If you open your Battlesnake URL in a browser you should see this data
 function info(idx = 0) { 
-
   console.log("INFO"); 
 
-
-
   const snakeInfos = [ 
-
-      { 
-
-          apiversion: "1", 
-
-          author: "Anastasia", // TODO: Your Battlesnake Username 
-
-          color: "#3E338F", // TODO: Choose color 
-
-          head: "smile", // TODO: Choose head 
-
-          tail: "default", // TODO: Choose tail 
-
+      {
+        apiversion: "1", 
+        author: "Anastasia", // TODO: Your Battlesnake Username 
+        color: "#3E338F", // TODO: Choose color 
+        head: "smile", // TODO: Choose head 
+        tail: "default", // TODO: Choose tail 
       }, 
 
       { 
-
-          apiversion: "1", 
-
-          author: "Sofia", // TODO: Your Battlesnake Username 
-
-          color: "#FF0000", // TODO: Choose color 
-
-          head: "smile", // TODO: Choose head 
-
-          tail: "curled", // TODO: Choose tail 
-
+        apiversion: "1", 
+        author: "Sofia", // TODO: Your Battlesnake Username 
+        color: "#FF0000", // TODO: Choose color 
+        head: "smile", // TODO: Choose head 
+        tail: "curled", // TODO: Choose tail 
       }, 
-
   ]; 
 
-
-
   return snakeInfos[idx]; 
-
 } 
-function info() {
-  console.log("INFO");
-
-  return {
-    apiversion: "1",
-    author: "", // TODO: Your Battlesnake Username
-    color: "#888888", // TODO: Choose color
-    head: "default", // TODO: Choose head
-    tail: "default", // TODO: Choose tail
-  };
-}
-
 // start is called when your Battlesnake begins a game
 function start(gameState) {
   console.log("GAME START");
@@ -80,9 +34,6 @@ function end(gameState) {
   console.log("GAME OVER\n");
 }
 
-// move is called on every turn and returns your next move
-// Valid moves are "up", "down", "left", or "right"
-// See https://docs.battlesnake.com/api/example-move for available data
 function move(gameState) {
   const myHead = gameState.you.body[0];
   const myNeck = gameState.you.body[1];
@@ -126,38 +77,45 @@ function move(gameState) {
   if (possibleMoves.right.x >= gameState.board.width) {
       possibleMoves.right.safe = false;
   }
-
   // TODO: Step 2 - Prevent your Battlesnake from colliding with itself
   // myBody = gameState.you.body;
-  // Task 3 - Avoiding collision with itself
 
-  gameState.you.body.forEach((snakePart) => {
-    Object.entries(possibleMoves).forEach(([direction, value]) => {
-      if (value.x === snakePart.x && value.y === snakePart.y) {
-        value.safe = false;
-      }
-    });
-  });
+  //Task 3 - Avoiding collision with itself
+  // gameState.you.body.forEach((snakePart) => {
+  //     Object.entries(possibleMoves).forEach(([direction, value]) => {
+  //         if (value.x === snakePart.x && value.y === snakePart.y) {
+  //             value.safe = false;
+  //         }
+  //     });
+  // });
+
   // TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
   // opponents = gameState.board.snakes;
 
-  gameState.board.snakes.forEach((snake) => { 
+  //Task 4 - Avoiding collision with other sneaks, Task 3 is a subset of this task as gameState.board.snakes includes gameState.you
+  // gameState.board.snakes.forEach((snake) => {
+  //     snake.body.forEach((snakePart) => {
+  //         Object.entries(possibleMoves).forEach(([direction, value]) => {
+  //             if (value.x === snakePart.x && value.y === snakePart.y) {
+  //                 value.safe = false;
+  //             }
+  //         });
+  //     });
+  // });
 
-    snake.body.forEach((snakePart) => { 
+  //Task 17 - Iteration of Task 3 and 4, we don't need to check the tail bodypart of each snake
+  gameState.board.snakes.forEach((snake) => {
+      snake.body.forEach((snakePart, idx, arr) => {
+          Object.entries(possibleMoves).forEach(([direction, value]) => {
+              if(idx === arr.length-1)
+                  return;
 
-        Object.entries(possibleMoves).forEach(([direction, value]) => { 
-
-            if (value.x === snakePart.x && value.y === snakePart.y) { 
-
-                value.safe = false; 
-
-            } 
-
-        }); 
-
-    }); 
-
-});
+              if (value.x === snakePart.x && value.y === snakePart.y) {
+                  value.safe = false;
+              }
+          });
+      });
+  });
 
   // Are there any safe moves left?
     const safeMoves = Object.keys(possibleMoves).filter((key) => possibleMoves[key].safe);
@@ -176,9 +134,24 @@ function move(gameState) {
   return { move: nextMove };
 }
 
-runServer({
-  info: info,
-  start: start,
-  move: move,
-  end: end,
+let serverPromises = [];
+for (let i = 0; i < Number(process.argv[2]); i++) {
+    serverPromises.push(runServer({ info: () => info(i), start: start, move: move, end: end }, i));
+}
+Promise.all(serverPromises).then((ports, snakeId) => {
+    const args = ports.map((port, idx) => `--name ${info(snakeId).author} --url http://localhost:${port}`).join(" ");
+    exec(
+        `${process.cwd()}/battlesnake/battlesnake.exe  play -W 11 -H 11 ${args} -g standard --browser -d 100`,
+        (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+        }
+    );
 });
