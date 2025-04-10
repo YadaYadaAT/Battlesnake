@@ -6,7 +6,6 @@
   "scripts": {
     "prepare": "husky",
     "start": "node index.js",
-    "play": "battlesnake\\battlesnake.exe play -W 11 -H 11 --name 'Test' --url http://localhost:8000 -g solo --browser",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
