@@ -1,6 +1,7 @@
-import express from 'express';
+const express = require('express');
 
-export default function runServer(handlers) {
+exports.runServer = function(handlers, idx) {
+  return new Promise(res => {
     const app = express();
     app.use(express.json());
   
@@ -28,9 +29,10 @@ export default function runServer(handlers) {
     })
   
     const host = '0.0.0.0';
-    const port = process.env.PORT || 8000;
+    const port = (process.env.PORT || 8000)+idx;
   
     app.listen(port, host, () => {
-      console.log(`Running Battlesnake at http://${host}:${port}...`)
+      res(port);
     });
+  })
   }
