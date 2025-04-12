@@ -110,14 +110,62 @@ function move(gameState) {
     }
 
   // Choose a random move from the safe moves
-  const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
+//   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
   // TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
   // food = gameState.board.food;
 
-  console.log(`MOVE ${gameState.turn}: ${nextMove}`);
-  return { move: nextMove };
+    //Task 8, select next move using Manhattan distance
+    let nextMove;
+    if (!gameState.board.food.length) {
+        nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
+        console.log("random next move");
+    } else {
+        const foods = gameState.board.food;
+        foods.forEach((food) => {
+            food.distanceX = Math.abs(myHead.x - food.x);
+            const xDirection = myHead.x - food.x < 0 ? "right" : "left";
+            food.distanceY = Math.abs(myHead.y - food.y);
+            const yDirection = myHead.y - food.y < 0 ? "up" : "down";
+            if (food.distanceX < food.distanceY) {
+                if (food.distanceX === 0) {
+                    food.primaryDirection = yDirection;
+                    food.secondaryDirection = "none";
+                } else {
+                    food.primaryDirection = xDirection;
+                    food.secondaryDirection = yDirection;
+                }
+            } else {
+                if (food.distanceY === 0) {
+                    food.primaryDirection = xDirection;
+                    food.secondaryDirection = "none";
+                } else {
+                    food.primaryDirection = yDirection;
+                    food.secondaryDirection = xDirection;
+                }
+            }
+        });
+        //We sort the foods by the distance to our snake's head
+        foods.sort((a, b) => a.distanceX + a.distanceY - (b.distanceX + b.distanceY));
+        //The closest food is the one we can move towards, not the one that is physically closest to us
+        const closestFood = foods.find(
+            (food) => safeMoves.includes(food.primaryDirection) || safeMoves.includes(food.secondaryDirection)
+        );
+        if (closestFood) {
+            nextMove = safeMoves.includes(closestFood.primaryDirection)
+                ? closestFood.primaryDirection
+                : closestFood.secondaryDirection;
+            console.log(safeMoves, myHead, closestFood);
+        } else {
+            //No foods in the direction that is safe to move to, we move randomly
+            nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
+        }
+    }
+    console.log(`MOVE ${gameState.turn}: ${nextMove}`);
+    return { move: nextMove };
 }
+
+
 
 let serverPromises = [];
 for (let i = 0; i < Number(process.argv[2]); i++) {
