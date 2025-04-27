@@ -1,3 +1,10 @@
+---
+name: Feature
+about: Create a pull request for a new feature
+title: "[FEATURE]"
+labels: feature
+assignees: ""
+---
 ## Feature Description
 - What new feature is being added?
 
