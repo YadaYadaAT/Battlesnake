@@ -1,3 +1,10 @@
+---
+name: Bugfix
+about: Create a pull request for a bugfix
+title: "[BUGFIX]"
+labels: bug
+assignees: ""
+---
 ## Bug Description
 - What is the bug?
 
