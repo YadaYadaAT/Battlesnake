@@ -1,8 +1,3 @@
-## 1.0.0 (2025-05-08)
-
-
-
-
 ## <small>0.0.1 (2025-04-27)</small>
 
 * chore: add code from repl.it to index.js ([2876a24](https://github.com/YadaYadaAT/Battlesnake/commit/2876a24)), closes [#BJ-48](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-48)
