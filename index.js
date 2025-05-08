@@ -19,6 +19,22 @@ function info(idx = 0) {
       color: '#FF0000',
       head: 'smile',
       tail: 'curled'
+    },
+
+    {
+      apiversion: '1',
+      author: 'SofiaK',
+      color: '#00FF88',
+      head: 'fang',
+      tail: 'round-bum'
+    },
+
+    {
+      apiversion: '1',
+      author: 'Iro',
+      color: '#3366FF',
+      head: 'evil',
+      tail: 'freckled'
     }
   ];
 
@@ -69,30 +85,32 @@ function move(gameState) {
     possibleMoves.right.safe = false;
   }
   // TODO: Step 2 - Prevent your Battlesnake from colliding with itself
-  // gameState.you.body.forEach((snakePart) => {
-  //     Object.entries(possibleMoves).forEach(([direction, value]) => {
-  //         if (value.x === snakePart.x && value.y === snakePart.y) {
-  //             value.safe = false;
-  //         }
-  //     });
-  // });
+  gameState.you.body.forEach((snakePart) => {
+    Object.entries(possibleMoves).forEach(([direction, value]) => {
+      if (value.x === snakePart.x && value.y === snakePart.y) {
+        value.safe = false;
+      }
+    });
+  });
 
   // TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
-  // gameState.board.snakes.forEach((snake) => {
-  //     snake.body.forEach((snakePart) => {
-  //         Object.entries(possibleMoves).forEach(([direction, value]) => {
-  //             if (value.x === snakePart.x && value.y === snakePart.y) {
-  //                 value.safe = false;
-  //             }
-  //         });
-  //     });
-  // });
+  gameState.board.snakes.forEach((snake) => {
+    snake.body.forEach((snakePart) => {
+      Object.entries(possibleMoves).forEach(([direction, value]) => {
+        if (value.x === snakePart.x && value.y === snakePart.y) {
+          value.safe = false;
+        }
+      });
+    });
+  });
 
   //Iteration of Task 3 and 4, we don't need to check the tail bodypart of each snake
   gameState.board.snakes.forEach((snake) => {
+    const isMe = snake.id === gameState.you.id;
     snake.body.forEach((snakePart, idx, arr) => {
       Object.entries(possibleMoves).forEach(([direction, value]) => {
-        if (idx === arr.length - 1) return;
+        // For *other* snakes, skip the tail
+        if (!isMe && idx === arr.length - 1) return;
 
         if (value.x === snakePart.x && value.y === snakePart.y) {
           value.safe = false;
