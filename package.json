@@ -3,9 +3,15 @@
   "version": "1.0.0",
   "description": "This repository contains the source code and configuration for our Battlesnake game. The project is focused on implementing continuous integration and delivery (CI/CD) pipelines using GitHub Actions, with issue tracking and agile methodologies supported by YouTrack integration.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "prepare": "husky",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release": "standard-version",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +22,17 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
-    "husky": "^9.1.7"
+    "conventional-changelog-cli": "^5.0.0",
+    "@eslint/js": "^9.26.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-sonarjs": "^3.0.2",
+    "eslint-plugin-unicorn": "^59.0.1",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
   }
 }
