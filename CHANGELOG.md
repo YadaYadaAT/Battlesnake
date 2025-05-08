@@ -1,3 +1,16 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.0.0](https://github.com/YadaYadaAT/Battlesnake/compare/v0.0.1...v1.0.0) (2025-05-08)
+
+
+### Features
+
+* configure editorconfig ([e6caa3f](https://github.com/YadaYadaAT/Battlesnake/commit/e6caa3f4e8264447fea4312c5a3ce25c52e421e1)), closes [#BJ-34](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-34)
+* configure eslint ([cd59ce9](https://github.com/YadaYadaAT/Battlesnake/commit/cd59ce9993e2a3f4fad9cdaf291b676bb9875c93)), closes [#BJ-37](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-37)
+* configure prettier with default configs ([23bd60c](https://github.com/YadaYadaAT/Battlesnake/commit/23bd60cce916f9469314daca81762edbdcd34e6b)), closes [#BJ-35](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-35) [#BJ-36](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-36)
+
 ## <small>0.0.1 (2025-04-27)</small>
 
 * chore: add code from repl.it to index.js ([2876a24](https://github.com/YadaYadaAT/Battlesnake/commit/2876a24)), closes [#BJ-48](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-48)
