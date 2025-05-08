@@ -102,6 +102,41 @@ function move(gameState) {
       });
   });
 
+  // Check for potential head-to-head collisions with other snakes
+  gameState.board.snakes.forEach((snake) => {
+    // Skip if it's our own snake
+    if (snake.id === gameState.you.id) {
+        return;
+    }
+
+    // Get the other snake's head
+    const otherHead = snake.body[0];
+    const otherLength = snake.body.length;
+    const myLength = gameState.you.body.length;
+
+    // Check each possible move for potential head-to-head collision
+    Object.entries(possibleMoves).forEach(([direction, value]) => {
+        // Calculate potential head-to-head collision cells
+        const potentialCollisions = [
+            { x: otherHead.x + 1, y: otherHead.y }, // right
+            { x: otherHead.x - 1, y: otherHead.y }, // left
+            { x: otherHead.x, y: otherHead.y + 1 }, // up
+            { x: otherHead.x, y: otherHead.y - 1 }, // down
+        ];
+
+        // Check if our move would result in head-to-head collision
+        potentialCollisions.forEach((cell) => {
+            if (value.x === cell.x && value.y === cell.y) {
+                // Mark move as unsafe if our snake is shorter or equal in length
+                if (myLength <= otherLength) {
+                    value.safe = false;
+                    console.log(`Avoiding head-to-head with snake ${snake.id} - they are longer or equal in length`);
+                }
+            }
+        });
+    });
+});
+
   // Are there any safe moves left?
     const safeMoves = Object.keys(possibleMoves).filter((key) => possibleMoves[key].safe);
     if (safeMoves.length == 0) {
