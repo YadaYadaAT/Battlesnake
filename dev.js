@@ -1,6 +1,8 @@
-import nodemon from "nodemon";
-import {execSync} from "child_process";
+import nodemon from 'nodemon';
+import { execSync } from 'child_process';
 
-nodemon({ script: "index.js" }).on("restart", () => {
-    execSync("npm run play");
+/* eslint-env node, es6 */
+
+nodemon({ script: 'index.js' }).on('restart', () => {
+  execSync('npm run play');
 });
