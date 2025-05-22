@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const handlers = require('./handlers');
 
-
 const numSnakes = Number(process.argv[2]) || 1;
 let serverPromises = [];
 

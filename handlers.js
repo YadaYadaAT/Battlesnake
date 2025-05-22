@@ -12,7 +12,7 @@ function info(idx = 0) {
 
     {
       apiversion: '1',
-      author: 'Sofia',
+      author: 'SofiaLoukisa',
       color: '#FF0000',
       head: 'smile',
       tail: 'curled'
@@ -20,7 +20,7 @@ function info(idx = 0) {
 
     {
       apiversion: '1',
-      author: 'SofiaK',
+      author: 'SofiaKakou',
       color: '#00FF88',
       head: 'fang',
       tail: 'round-bum'
@@ -102,14 +102,33 @@ function move(gameState) {
   });
 
   //Iteration of Task 3 and 4, we don't need to check the tail bodypart of each snake
-  gameState.board.snakes.forEach((snake) => {
+gameState.board.snakes.forEach((snake) => {
     const isMe = snake.id === gameState.you.id;
-    snake.body.forEach((snakePart, idx, arr) => {
-      Object.entries(possibleMoves).forEach(([direction, value]) => {
-        // For *other* snakes, skip the tail
-        if (!isMe && idx === arr.length - 1) return;
 
-        if (value.x === snakePart.x && value.y === snakePart.y) {
+    snake.body.forEach((snakePart, idx, arr) => {
+      const isTail = idx === arr.length - 1;
+
+      Object.entries(possibleMoves).forEach(([direction, value]) => {
+        const isSamePosition = value.x === snakePart.x && value.y === snakePart.y;
+
+        if (!isMe && isTail) {
+          // Check if this snake is likely to eat (tail won't move)
+          const snakeHead = snake.body[0];
+
+          const willEatFood = gameState.board.food.some(food => 
+            (Math.abs(food.x - snakeHead.x) === 1 && food.y === snakeHead.y) ||
+            (Math.abs(food.y - snakeHead.y) === 1 && food.x === snakeHead.x)
+          );
+
+          if (willEatFood && isSamePosition) {
+            value.safe = false;
+          }
+
+          return; // Continue to next body part
+        }
+
+        // All other body parts (including own) are unsafe
+        if (isSamePosition) {
           value.safe = false;
         }
       });
@@ -273,3 +292,5 @@ exports.start = start;
 exports.move = move;
 exports.end = end;
 exports.floodFill = floodFill;
+
+
