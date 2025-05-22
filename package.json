@@ -11,8 +11,10 @@
     "release": "standard-version",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "upload-coverage": "npx codecov",
     "test:watch": "jest --watch --coverage",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "start:ci": "node index.js 0"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.26.0",
     "axios": "^1.9.0",
+    "codecov": "^3.8.3",
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.2",
