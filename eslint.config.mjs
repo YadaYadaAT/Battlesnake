@@ -35,5 +35,33 @@ export default defineConfig([
       semi: ['error', 'always'],
       quotes: ['error', 'single']
     }
+  },
+  {
+    files: ['**/*.test.{js,mjs,cjs}', '**/__tests__/**/*.{js,mjs,cjs}'],
+    plugins: {
+      jest: require('eslint-plugin-jest')
+    },
+    languageOptions: {
+      globals: {
+        jest: 'readonly',
+        ...globals.browser,
+        process: 'readonly'
+      },
+      sourceType: 'module'
+    },
+    extends: ['plugin:jest/recommended'],
+    rules: {
+      'jest/no-disabled-tests': 'warn',
+      'jest/expect-expect': 'warn',
+      'jest/valid-title': 'error',
+      'jest/no-conditional-expect': 'error',
+      'jest/no-focused-tests': 'error',
+      'jest/no-identical-title': 'error',
+      'jest/prefer-to-be': 'warn',
+      'jest/prefer-to-have-length': 'warn',
+      'jest/valid-expect-in-promise': 'error',
+      'jest/require-top-level-describe': 'error',
+      'no-magic-numbers': ['error', { ignore: [-1, 0, 1] }]
+    }
   }
 ]);
