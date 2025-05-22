@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/YadaYadaAT/Battlesnake/compare/v1.0.1...v1.0.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* small change of names for snakes ([5236b22](https://github.com/YadaYadaAT/Battlesnake/commit/5236b22d9e3f8af9cddf248c8bd904e5e20629fa)), closes [#BJ-14](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-14)
+
 ### [1.0.1](https://github.com/YadaYadaAT/Battlesnake/compare/v1.0.0...v1.0.1) (2025-05-09)
 
 
