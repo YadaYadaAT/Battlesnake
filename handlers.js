@@ -222,7 +222,54 @@ function move(gameState) {
   return { move: nextMove };
 }
 
+function floodFill(board, start) {
+  const width = board.width;
+  const height = board.height;
+  const visited = new Set();
+  const stack = [start];
+
+  // Helper to create a unique key for each cell
+  function key(x, y) {
+    return `${x},${y}`;
+  }
+
+  // Check if cell is within bounds and not visited or blocked
+  function isValid(x, y) {
+    if (x < 0 || x >= width || y < 0 || y >= height) return false;
+    if (visited.has(key(x, y))) return false;
+
+    // Check if cell is occupied by any snake body
+    for (const snake of board.snakes) {
+      for (const part of snake.body) {
+        if (part.x === x && part.y === y) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  let area = 0;
+
+  while (stack.length > 0) {
+    const { x, y } = stack.pop();
+    if (!isValid(x, y)) continue;
+
+    visited.add(key(x, y));
+    area++;
+
+    // Add neighbors (up, down, left, right)
+    stack.push({ x: x + 1, y });
+    stack.push({ x: x - 1, y });
+    stack.push({ x, y: y + 1 });
+    stack.push({ x, y: y - 1 });
+  }
+
+  return area;
+}
+
 exports.info = info;
 exports.start = start;
 exports.move = move;
 exports.end = end;
+exports.floodFill = floodFill;
