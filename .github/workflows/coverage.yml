@@ -22,8 +22,8 @@ jobs:
 
       - name: Start server
         run: |
-          npm run start & 
-          sleep 3 
+          npm run start:ci &
+          npx wait-on http://localhost:8000
 
 
       - name: Run tests with coverage
