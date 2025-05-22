@@ -1,9 +1,13 @@
 export default {
   collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'html'],
   collectCoverageFrom: [
+    'handlers.js',
     'src/**/*.js',
     '!**/node_modules/**',
-    '!**/test/**'
+    '!**/test/**',
+    '!**/_tests_/**'
   ],
   coverageThreshold: {
     global: {
