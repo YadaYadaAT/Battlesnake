@@ -1,6 +1,6 @@
 const express = require('express');
 
-exports.runServer = function (handlers, idx) {
+exports.runServer = function (handlers, idx = 0) {
   return new Promise((res) => {
     const app = express();
     app.use(express.json());
