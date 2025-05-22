@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/YadaYadaAT/Battlesnake/compare/v1.0.2...v1.1.0) (2025-05-22)
+
+
+### Features
+
+* add initial testing logic and ensure tests run ([3ad5bbe](https://github.com/YadaYadaAT/Battlesnake/commit/3ad5bbee0e644e4517e7633a552e1dd160ffa01b)), closes [#BJ-13](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-13)
+* implement flood-fill algorithm ([63bd164](https://github.com/YadaYadaAT/Battlesnake/commit/63bd164542a45babd6556d455cab4b1ede60d221)), closes [#BJ-12](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-12)
+
+
+### Bug Fixes
+
+* add linux distro bs executable and identification script ([0fef430](https://github.com/YadaYadaAT/Battlesnake/commit/0fef43012cc5fe7d4e9079efd9e058577f83fd17))
+* change snakes names ([b6b6724](https://github.com/YadaYadaAT/Battlesnake/commit/b6b6724a1306db499c62f5e98b727b6cb4d60dbc)), closes [#BJ-14](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-14)
+* **ci:** add job for battlesnake linux ([9071b89](https://github.com/YadaYadaAT/Battlesnake/commit/9071b8991409c0a1d2d7307364c34811d7a08c71))
+* **ci:** add start.ci script for robust server start on workflow ([ac632cc](https://github.com/YadaYadaAT/Battlesnake/commit/ac632ccebbf2ebcbb68cb152357186649908d59d))
+* **ci:** ensure server starts on default port ([0524880](https://github.com/YadaYadaAT/Battlesnake/commit/052488087368770b4de2d37e2fbb77b6eb152482))
+* name change hotfix ([a804534](https://github.com/YadaYadaAT/Battlesnake/commit/a804534ced5c285c64700fb38a7cdfc541581de9))
+
 ### [1.0.2](https://github.com/YadaYadaAT/Battlesnake/compare/v1.0.1...v1.0.2) (2025-05-22)
 
 
