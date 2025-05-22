@@ -15,7 +15,7 @@ function info(idx = 0) {
 
     {
       apiversion: '1',
-      author: 'Sofia',
+      author: 'SofiaLoukisa',
       color: '#FF0000',
       head: 'smile',
       tail: 'curled'
@@ -23,7 +23,7 @@ function info(idx = 0) {
 
     {
       apiversion: '1',
-      author: 'SofiaK',
+      author: 'SofiaKakou',
       color: '#00FF88',
       head: 'fang',
       tail: 'round-bum'
