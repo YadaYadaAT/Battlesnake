@@ -287,6 +287,29 @@ function floodFill(board, start) {
   return area;
 }
 
+// function evaluateMove(move, gameState) {
+//   let score = 0;
+
+//   // 1. Safety check
+//   if (!move.safe) return -Infinity;
+
+//   // 2. Distance to food
+//   const nearestFood = getNearestFood(move.x, move.y, gameState.board.food);
+//   const foodDistance = manhattanDistance(move.x, move.y, nearestFood.x, nearestFood.y);
+//   const healthWeight = (100 - gameState.you.health); // More desperate = higher score for food
+//   score -= foodDistance * (1 + healthWeight / 50); // More weight if health is low
+
+//   // 3. Open space
+//   const floodArea = floodFill(move.x, move.y, gameState);
+//   score += floodArea * 1.5;
+
+//   // 4. Danger zone (close to other snake heads)
+//   const danger = isNearEnemyHead(move.x, move.y, gameState);
+//   if (danger) score -= 10;
+
+//   return score;
+// }
+
 exports.info = info;
 exports.start = start;
 exports.move = move;
