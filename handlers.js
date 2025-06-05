@@ -115,8 +115,49 @@ function move(gameState) {
     });
   });
 
-  const safeMoves = Object.keys(possibleMoves).filter((key) => possibleMoves[key].safe);
-  if (safeMoves.length === 0) return { move: 'down' };
+  // Add hunting behavior
+  const nearbySmallerSnakes = findNearbySmallerSnakes(gameState, myHead);
+  
+  // If we found smaller snakes nearby, prioritize hunting
+  if (nearbySmallerSnakes.length > 0) {
+    const targetSnake = nearbySmallerSnakes[0]; // Target the closest smaller snake
+    
+    // Evaluate each possible move for hunting effectiveness
+    Object.entries(possibleMoves).forEach(([direction, move]) => {
+      if (move.safe) {
+        // Check if this move would be good for hunting
+        if (isGoodHuntingMove(move, targetSnake, gameState)) {
+          // Prioritize this move by adding a hunting score
+          move.huntingScore = 1;
+        } else {
+          move.huntingScore = 0;
+        }
+      }
+    });
+
+    // Filter safe moves and sort by hunting score
+    const safeMoves = Object.entries(possibleMoves)
+      .filter(([_, move]) => move.safe)
+      .sort(([_, a], [__, b]) => (b.huntingScore || 0) - (a.huntingScore || 0));
+
+    if (safeMoves.length > 0) {
+      const nextMove = safeMoves[0][0];
+      console.log(`MOVE ${gameState.turn}: Hunting smaller snake! Moving ${nextMove}`);
+      return { move: nextMove };
+    }
+  }
+
+  // Are there any safe moves left?
+  const safeMoves = Object.keys(possibleMoves).filter(
+    (key) => possibleMoves[key].safe
+  );
+  if (safeMoves.length == 0) {
+    console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
+    return { move: 'down' };
+  }
+
+  // Choose a random move from the safe moves
+  //   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
 
   // Move toward food (Manhattan distance)
   let nextMove;
@@ -190,6 +231,75 @@ function floodFill(board, start) {
   }
 
   return area;
+}
+
+/**
+ * Finds nearby smaller snakes within a detection radius
+ * @param {Object} gameState - The current game state
+ * @param {Object} myHead - The head position of our snake
+ * @param {number} detectionRadius - How far to look for smaller snakes
+ * @returns {Array} Array of nearby smaller snakes with their positions and distances
+ */
+function findNearbySmallerSnakes(gameState, myHead, detectionRadius = 5) {
+  const nearbySnakes = [];
+  const myLength = gameState.you.body.length;
+
+  gameState.board.snakes.forEach((snake) => {
+    // Skip if it's our own snake
+    if (snake.id === gameState.you.id) return;
+
+    // Skip if the snake is longer or equal in length
+    if (snake.body.length >= myLength) return;
+
+    const snakeHead = snake.body[0];
+    const distance = Math.abs(snakeHead.x - myHead.x) + Math.abs(snakeHead.y - myHead.y);
+
+    // Only consider snakes within detection radius
+    if (distance <= detectionRadius) {
+      nearbySnakes.push({
+        snake,
+        head: snakeHead,
+        distance,
+        // Calculate potential next positions of the smaller snake
+        possibleNextMoves: calculatePossibleMoves(snakeHead, gameState.board)
+      });
+    }
+  });
+
+  // Sort by distance to prioritize closer snakes
+  return nearbySnakes.sort((a, b) => a.distance - b.distance);
+}
+
+/**
+ * Calculates possible moves for a given position
+ * @param {Object} position - The position to calculate moves from
+ * @param {Object} board - The game board
+ * @returns {Object} Object containing safe possible moves
+ */
+function calculatePossibleMoves(position, board) {
+  return {
+    up: { x: position.x, y: position.y + 1, safe: true },
+    down: { x: position.x, y: position.y - 1, safe: true },
+    left: { x: position.x - 1, y: position.y, safe: true },
+    right: { x: position.x + 1, y: position.y, safe: true }
+  };
+}
+
+/**
+ * Evaluates if a hunting move is safe and effective
+ * @param {Object} move - The potential move to evaluate
+ * @param {Object} targetSnake - The snake we're trying to hunt
+ * @param {Object} gameState - The current game state
+ * @returns {boolean} Whether the move is safe and good for hunting
+ */
+function isGoodHuntingMove(move, targetSnake, gameState) {
+  // Check if move would get us closer to the target
+  const currentDistance = Math.abs(move.x - targetSnake.head.x) + Math.abs(move.y - targetSnake.head.y);
+  const myHead = gameState.you.body[0];
+  const currentDistanceToTarget = Math.abs(myHead.x - targetSnake.head.x) + Math.abs(myHead.y - targetSnake.head.y);
+
+  // Move is good if it gets us closer to the target
+  return currentDistance < currentDistanceToTarget;
 }
 
 exports.info = info;
