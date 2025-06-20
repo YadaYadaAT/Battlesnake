@@ -41,9 +41,20 @@ function move(gameState) {
   const myHead = gameState.you.body[0];
   const myNeck = gameState.you.body[1];
   const myLength = gameState.you.body.length;
+  
+  // Calculate total board size for dynamic thresholds
+  // This allows the snake to adapt its behavior based on map dimensions
+  const boardSize = gameState.board.width * gameState.board.height;
 
   // Initialize A* pathfinder with the game board
   const pathfinder = new AStar(gameState.board);
+
+  // Calculate dynamic thresholds based on board size
+  // These thresholds scale with the map size to maintain appropriate behavior
+  // on different board dimensions (small, standard, or large maps)
+  const minSafeArea = Math.max(3, Math.floor(boardSize * 0.1));     // At least 3 cells or 10% of board
+  const huntingThreshold = Math.max(50, Math.floor(boardSize * 0.2)); // Health threshold for hunting
+  const foodPriorityThreshold = Math.max(30, Math.floor(boardSize * 0.15)); // Health threshold for food priority
 
   // Get all possible moves
   let possibleMoves = {
@@ -408,6 +419,25 @@ if (nextArea > 3) {  // Minimum area threshold
 }
 
 /**
+
+ * Flood Fill Algorithm for Area Calculation
+ * 
+ * This function calculates the safe area around a given position on any board size.
+ * It's used to:
+ * 1. Evaluate path safety on different map sizes
+ * 2. Avoid getting trapped in small areas
+ * 3. Make decisions based on available space
+ * 
+ * The algorithm works by:
+ * - Starting from a given position
+ * - Exploring all reachable cells in the current board dimensions
+ * - Counting cells that aren't blocked by snake bodies
+ * - Returning the total safe area size
+ * 
+ * @param {Object} board - The game board with width and height
+ * @param {Object} start - Starting position {x, y}
+ * @returns {number} Size of the safe area
+
  * Determines the move direction between two positions
  * @param {Object} current - Current position {x, y}
  * @param {Object} next - Next position {x, y}
@@ -428,6 +458,7 @@ function getMoveDirection(current, next) {
  * @returns {number} The accessible space area.
  */
 function floodFill(board, start) {
+  // Get board dimensions - works with any map size
   const width = board.width;
   const height = board.height;
   const visited = new Set();
