@@ -5,6 +5,12 @@
 
 Welcome to the **Battlesnake CI/CD Automation** repository! This project is part of our university coursework where we combine competitive game development with hands-on DevOps experience. Here, we build a Battlesnake bot and integrate modern development practices including continuous integration, continuous delivery, and agile issue tracking.
 
+## Contributors:
+- Argyro Ververaki (vertimnu-s) && 'YadaYadaAt' (privately owned, org GitHub profile used for further control)
+- Sofia Kakou (SofiaKakou)
+- Sofia Loukisa (SofiaLoukisa)
+- Anastasia Kouridaki (akouridaki)
+
 ---
 
 ## Table of Contents
