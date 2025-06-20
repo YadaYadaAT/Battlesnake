@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/YadaYadaAT/Battlesnake/compare/v2.0.0...v2.0.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* deploy script bug ([848a08f](https://github.com/YadaYadaAT/Battlesnake/commit/848a08f6431a4f46451c3f8644e14a3328c9c61f))
+
 ## [2.0.0](https://github.com/YadaYadaAT/Battlesnake/compare/v1.1.0...v2.0.0) (2025-06-20)
 
 
