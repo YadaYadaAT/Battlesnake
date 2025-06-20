@@ -8,10 +8,34 @@ const { AStar } = require('./pathfinding');
 function info(idx = 0) {
   console.log('INFO');
   const snakeInfos = [
-    { apiversion: '1', author: 'Anastasia', color: '#3E338F', head: 'smile', tail: 'default' },
-    { apiversion: '1', author: 'SofiaLoukisa', color: '#FF0000', head: 'smile', tail: 'curled' },
-    { apiversion: '1', author: 'SofiaKakou', color: '#00FF88', head: 'fang', tail: 'round-bum' },
-    { apiversion: '1', author: 'Iro', color: '#3366FF', head: 'evil', tail: 'freckled' }
+    {
+      apiversion: '1',
+      author: 'Anastasia',
+      color: '#3E338F',
+      head: 'smile',
+      tail: 'default'
+    },
+    {
+      apiversion: '1',
+      author: 'SofiaLoukisa',
+      color: '#FF0000',
+      head: 'smile',
+      tail: 'curled'
+    },
+    {
+      apiversion: '1',
+      author: 'SofiaKakou',
+      color: '#00FF88',
+      head: 'fang',
+      tail: 'round-bum'
+    },
+    {
+      apiversion: '1',
+      author: 'Iro',
+      color: '#3366FF',
+      head: 'evil',
+      tail: 'freckled'
+    }
   ];
   return snakeInfos[idx];
 }
@@ -645,10 +669,12 @@ function move(gameState) {
   else if (myNeck.y > myHead.y) possibleMoves.up.safe = false;
 
   // Avoid out-of-bounds
-  if (possibleMoves.up.y >= gameState.board.height) possibleMoves.up.safe = false;
+  if (possibleMoves.up.y >= gameState.board.height)
+    possibleMoves.up.safe = false;
   if (possibleMoves.down.y < 0) possibleMoves.down.safe = false;
   if (possibleMoves.left.x < 0) possibleMoves.left.safe = false;
-  if (possibleMoves.right.x >= gameState.board.width) possibleMoves.right.safe = false;
+  if (possibleMoves.right.x >= gameState.board.width)
+    possibleMoves.right.safe = false;
 
   // Avoid own body
   gameState.you.body.forEach((part) => {
@@ -676,7 +702,9 @@ function move(gameState) {
         if (!isMe && isTail) {
           const head = snake.body[0];
           const willEat = gameState.board.food.some(
-            (f) => (Math.abs(f.x - head.x) === 1 && f.y === head.y) || (Math.abs(f.y - head.y) === 1 && f.x === head.x)
+            (f) =>
+              (Math.abs(f.x - head.x) === 1 && f.y === head.y) ||
+              (Math.abs(f.y - head.y) === 1 && f.x === head.x)
           );
           if (willEat && same) move.safe = false;
           return;
@@ -712,11 +740,12 @@ function move(gameState) {
 
   // Add hunting behavior
   const nearbySmallerSnakes = findNearbySmallerSnakes(gameState, myHead);
-  
+
   // If we found smaller snakes nearby, prioritize hunting
   if (nearbySmallerSnakes.length > 0) {
-    const targetSnake = nearbySmallerSnakes[0];
-    
+    const targetSnake = nearbySmallerSnakes[0]; // Target the closest smaller snake
+
+    // Evaluate each possible move for hunting effectiveness
     Object.entries(possibleMoves).forEach(([direction, move]) => {
       if (move.safe) {
         // Check if this move would be good for hunting
@@ -751,7 +780,7 @@ function move(gameState) {
   //         // Check if this snake is likely to eat (tail won't move)
   //         const snakeHead = snake.body[0];
 
-  //         const willEatFood = gameState.board.food.some(food => 
+  //         const willEatFood = gameState.board.food.some(food =>
   //           (Math.abs(food.x - snakeHead.x) === 1 && food.y === snakeHead.y) ||
   //           (Math.abs(food.y - snakeHead.y) === 1 && food.x === snakeHead.x)
   //         );
@@ -778,23 +807,23 @@ function move(gameState) {
   // Add food as targets
 
   // Add food as targets with priority based on health
-  gameState.board.food.forEach(food => {
+  gameState.board.food.forEach((food) => {
     // Calculate flood fill area for each potential move to food
     const foodArea = floodFill(gameState.board, food);
     targets.push({
       x: food.x,
       y: food.y,
       food: true,
-      priority: gameState.you.health < 50 ? 1 : 2,
-      area: foodArea
+      priority: gameState.you.health < 50 ? 1 : 2, // Higher priority when health is low
+      area: foodArea // Add flood fill area for path evaluation
     });
   });
 
-// // Check for potential head-to-head collisions with other snakes
-// gameState.board.snakes.forEach((snake) => {
-//   // Skip if it's our own snake
-//   if (snake.id === gameState.you.id) {
-//     return;
+  // // Check for potential head-to-head collisions with other snakes
+  // gameState.board.snakes.forEach((snake) => {
+  //   // Skip if it's our own snake
+  //   if (snake.id === gameState.you.id) {
+  //     return;
   // Add smaller snakes as targets
   // gameState.board.snakes.forEach(snake => {
   //   if (snake.id !== gameState.you.id && snake.body.length < gameState.you.body.length) {
@@ -805,23 +834,22 @@ function move(gameState) {
   //     });
   //   }
   // });
-//  // Get the other snake's head
-//  const otherHead = snake.body[0];
-//  const otherLength = snake.body.length;
-//  const myLength = gameState.you.body.length;
-
+  //  // Get the other snake's head
+  //  const otherHead = snake.body[0];
+  //  const otherLength = snake.body.length;
+  //  const myLength = gameState.you.body.length;
 
   // Add smaller snakes as targets when health is high
   if (gameState.you.health >= 50) {
-    gameState.board.snakes.forEach(snake => {
+    gameState.board.snakes.forEach((snake) => {
       if (snake.id !== gameState.you.id && snake.body.length < myLength) {
         const snakeArea = floodFill(gameState.board, snake.body[0]);
         targets.push({
           x: snake.body[0].x,
           y: snake.body[0].y,
           snake: snake,
-          priority: 1,
-          area: snakeArea
+          priority: 1, // Highest priority for hunting when health is good
+          area: snakeArea // Add flood fill area for path evaluation
         });
       }
     });
@@ -830,35 +858,35 @@ function move(gameState) {
   // Find best path using A*
   const bestPath = pathfinder.findBestPathToTargets(myHead, targets, gameState);
 
-   // Check each possible move for potential head-to-head collision
-//    Object.entries(possibleMoves).forEach(([direction, value]) => {
-//     // Calculate potential head-to-head collision cells
-//     const potentialCollisions = [
-//       { x: otherHead.x + 1, y: otherHead.y }, // right
-//       { x: otherHead.x - 1, y: otherHead.y }, // left
-//       { x: otherHead.x, y: otherHead.y + 1 }, // up
-//       { x: otherHead.x, y: otherHead.y - 1 } // down
-//     ];
+  // Check each possible move for potential head-to-head collision
+  //    Object.entries(possibleMoves).forEach(([direction, value]) => {
+  //     // Calculate potential head-to-head collision cells
+  //     const potentialCollisions = [
+  //       { x: otherHead.x + 1, y: otherHead.y }, // right
+  //       { x: otherHead.x - 1, y: otherHead.y }, // left
+  //       { x: otherHead.x, y: otherHead.y + 1 }, // up
+  //       { x: otherHead.x, y: otherHead.y - 1 } // down
+  //     ];
 
-//     // Check if our move would result in head-to-head collision
-//     potentialCollisions.forEach((cell) => {
-//       if (value.x === cell.x && value.y === cell.y) {
-//         // Mark move as unsafe if our snake is shorter or equal in length
-//         if (myLength <= otherLength) {
-//           value.safe = false;
-//           console.log(
-//             `Avoiding head-to-head with snake ${snake.id} - they are longer or equal in length`
-//           );
-//         }
-//       }
-//     });
-//   });
-// });
+  //     // Check if our move would result in head-to-head collision
+  //     potentialCollisions.forEach((cell) => {
+  //       if (value.x === cell.x && value.y === cell.y) {
+  //         // Mark move as unsafe if our snake is shorter or equal in length
+  //         if (myLength <= otherLength) {
+  //           value.safe = false;
+  //           console.log(
+  //             `Avoiding head-to-head with snake ${snake.id} - they are longer or equal in length`
+  //           );
+  //         }
+  //       }
+  //     });
+  //   });
+  // });
   if (bestPath && bestPath.length > 0) {
     // Get the next move from the path
     const nextPosition = bestPath[0];
     const moveDirection = getMoveDirection(myHead, nextPosition);
-    
+
     // Verify the move is still safe and leads to a good area
     if (safeMoves.includes(moveDirection)) {
       const nextArea = floodFill(gameState.board, nextPosition);
@@ -902,8 +930,14 @@ function move(gameState) {
         food.secondaryDirection = food.distanceY === 0 ? 'none' : xDir;
       }
     });
-    foods.sort((a, b) => a.distanceX + a.distanceY - (b.distanceX + b.distanceY));
-    const closest = foods.find((f) => safeMoves.includes(f.primaryDirection) || safeMoves.includes(f.secondaryDirection));
+    foods.sort(
+      (a, b) => a.distanceX + a.distanceY - (b.distanceX + b.distanceY)
+    );
+    const closest = foods.find(
+      (f) =>
+        safeMoves.includes(f.primaryDirection) ||
+        safeMoves.includes(f.secondaryDirection)
+    );
     nextMove = closest
       ? safeMoves.includes(closest.primaryDirection)
         ? closest.primaryDirection
@@ -1066,7 +1100,8 @@ function findNearbySmallerSnakes(gameState, myHead, detectionRadius = 5) {
     if (snake.body.length >= myLength) return;
 
     const snakeHead = snake.body[0];
-    const distance = Math.abs(snakeHead.x - myHead.x) + Math.abs(snakeHead.y - myHead.y);
+    const distance =
+      Math.abs(snakeHead.x - myHead.x) + Math.abs(snakeHead.y - myHead.y);
 
     // Only consider snakes within detection radius
     if (distance <= detectionRadius) {
@@ -1108,9 +1143,13 @@ function calculatePossibleMoves(position, board) {
  */
 function isGoodHuntingMove(move, targetSnake, gameState) {
   // Check if move would get us closer to the target
-  const currentDistance = Math.abs(move.x - targetSnake.head.x) + Math.abs(move.y - targetSnake.head.y);
+  const currentDistance =
+    Math.abs(move.x - targetSnake.head.x) +
+    Math.abs(move.y - targetSnake.head.y);
   const myHead = gameState.you.body[0];
-  const currentDistanceToTarget = Math.abs(myHead.x - targetSnake.head.x) + Math.abs(myHead.y - targetSnake.head.y);
+  const currentDistanceToTarget =
+    Math.abs(myHead.x - targetSnake.head.x) +
+    Math.abs(myHead.y - targetSnake.head.y);
 
   // Move is good if it gets us closer to the target
   return currentDistance < currentDistanceToTarget;
@@ -1121,5 +1160,3 @@ exports.start = start;
 exports.move = move;
 exports.end = end;
 exports.floodFill = floodFill;
-
-

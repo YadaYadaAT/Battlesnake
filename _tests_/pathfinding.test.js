@@ -1,6 +1,6 @@
 /**
  * Test suite for A* Pathfinding Implementation
- * 
+ *
  * These tests verify that the A* algorithm correctly:
  * 1. Finds optimal paths between points
  * 2. Handles obstacles and blocked paths
@@ -14,7 +14,7 @@ describe('A* Pathfinding', () => {
   // Test setup: Create a mock game board
   let astar;
   const mockBoard = {
-    width: 11,  // Standard Battlesnake board size
+    width: 11, // Standard Battlesnake board size
     height: 11
   };
 
@@ -42,7 +42,7 @@ describe('A* Pathfinding', () => {
       const node1 = new Node(5, 5);
       const node2 = new Node(5, 5);
       const node3 = new Node(6, 5);
-      expect(node1.equals(node2)).toBe(true);  // Same position
+      expect(node1.equals(node2)).toBe(true); // Same position
       expect(node1.equals(node3)).toBe(false); // Different position
     });
   });
@@ -51,8 +51,8 @@ describe('A* Pathfinding', () => {
   describe('AStar', () => {
     test('initializes grid with correct dimensions', () => {
       // Verify grid is created with proper size
-      expect(astar.grid.length).toBe(mockBoard.width);
-      expect(astar.grid[0].length).toBe(mockBoard.height);
+      expect(astar.grid).toHaveLength(mockBoard.width);
+      expect(astar.grid[0]).toHaveLength(mockBoard.height);
     });
 
     test('finds direct path when no obstacles', () => {
@@ -60,11 +60,14 @@ describe('A* Pathfinding', () => {
       const start = { x: 0, y: 0 };
       const end = { x: 5, y: 5 };
       const path = astar.findPath(start, end);
-      
+      const firstStep = path[0];
+
       // Verify path exists and connects start to end
       expect(path).not.toBeNull();
       expect(path.length).toBeGreaterThan(0);
-      expect(path[0]).toEqual({ x: 0, y: 0 });
+      expect(
+        Math.abs(firstStep.x - start.x) + Math.abs(firstStep.y - start.y)
+      ).toBe(1);
       expect(path[path.length - 1]).toEqual({ x: 5, y: 5 });
     });
 
@@ -74,10 +77,15 @@ describe('A* Pathfinding', () => {
         board: {
           width: mockBoard.width,
           height: mockBoard.height,
-          snakes: [{
-            // Create a vertical wall of snake body
-            body: Array.from({ length: mockBoard.height }, (_, y) => ({ x: 5, y }))
-          }]
+          snakes: [
+            {
+              // Create a vertical wall of snake body
+              body: Array.from({ length: mockBoard.height }, (_, y) => ({
+                x: 5,
+                y
+              }))
+            }
+          ]
         }
       };
       astar.updateGrid(gameState);
@@ -86,7 +94,7 @@ describe('A* Pathfinding', () => {
       const start = { x: 0, y: 0 };
       const end = { x: 10, y: 10 };
       const path = astar.findPath(start, end);
-      expect(path).toBeNull();  // Should return null as no path exists
+      expect(path).toBeNull(); // Should return null as no path exists
     });
 
     test('finds path around obstacles', () => {
@@ -95,19 +103,21 @@ describe('A* Pathfinding', () => {
         board: {
           width: mockBoard.width,
           height: mockBoard.height,
-          snakes: [{
-            // Create an L-shaped snake body
-            body: [
-              { x: 5, y: 0 },
-              { x: 5, y: 1 },
-              { x: 5, y: 2 },
-              { x: 5, y: 3 },
-              { x: 5, y: 4 },
-              { x: 6, y: 4 },
-              { x: 7, y: 4 },
-              { x: 8, y: 4 }
-            ]
-          }]
+          snakes: [
+            {
+              // Create an L-shaped snake body
+              body: [
+                { x: 5, y: 0 },
+                { x: 5, y: 1 },
+                { x: 5, y: 2 },
+                { x: 5, y: 3 },
+                { x: 5, y: 4 },
+                { x: 6, y: 4 },
+                { x: 7, y: 4 },
+                { x: 8, y: 4 }
+              ]
+            }
+          ]
         }
       };
       astar.updateGrid(gameState);
@@ -116,14 +126,16 @@ describe('A* Pathfinding', () => {
       const start = { x: 0, y: 0 };
       const end = { x: 10, y: 10 };
       const path = astar.findPath(start, end);
-      
+
       // Verify path exists and doesn't intersect with obstacles
       expect(path).not.toBeNull();
       expect(path.length).toBeGreaterThan(0);
-      path.forEach(point => {
-        expect(gameState.board.snakes[0].body.some(part => 
-          part.x === point.x && part.y === point.y
-        )).toBe(false);
+      path.forEach((point) => {
+        expect(
+          gameState.board.snakes[0].body.some(
+            (part) => part.x === point.x && part.y === point.y
+          )
+        ).toBe(false);
       });
     });
 
@@ -131,7 +143,7 @@ describe('A* Pathfinding', () => {
       // Test path scoring for food targets
       const gameState = {
         you: {
-          health: 30,  // Low health
+          health: 30, // Low health
           body: [{ x: 0, y: 0 }]
         },
         board: {
@@ -160,14 +172,16 @@ describe('A* Pathfinding', () => {
       // Test path scoring for snake targets
       const gameState = {
         you: {
-          body: Array(5).fill({ x: 0, y: 0 })  // Length 5 snake
+          body: Array(5).fill({ x: 0, y: 0 }) // Length 5 snake
         },
         board: {
           width: mockBoard.width,
           height: mockBoard.height,
-          snakes: [{
-            body: Array(3).fill({ x: 5, y: 5 })  // Length 3 snake
-          }]
+          snakes: [
+            {
+              body: Array(3).fill({ x: 5, y: 5 }) // Length 3 snake
+            }
+          ]
         }
       };
 
@@ -183,14 +197,14 @@ describe('A* Pathfinding', () => {
       ];
       const score = astar.evaluatePathScore(path, target, gameState);
       // Score should be adjusted based on length ratio (3/5)
-      expect(score).toBe(path.length * (3/5));
+      expect(score).toBe(path.length * (3 / 5));
     });
 
     test('finds best path among multiple targets', () => {
       // Test choosing the best target from multiple options
       const gameState = {
         you: {
-          health: 100,  // High health
+          health: 100, // High health
           body: [{ x: 0, y: 0 }]
         },
         board: {
@@ -202,15 +216,19 @@ describe('A* Pathfinding', () => {
 
       // Test with multiple food targets at different distances
       const targets = [
-        { x: 5, y: 5, food: true },  // Medium distance
-        { x: 8, y: 8, food: true },  // Far distance
-        { x: 2, y: 2, food: true }   // Close distance
+        { x: 5, y: 5, food: true }, // Medium distance
+        { x: 8, y: 8, food: true }, // Far distance
+        { x: 2, y: 2, food: true } // Close distance
       ];
 
-      const path = astar.findBestPathToTargets({ x: 0, y: 0 }, targets, gameState);
+      const path = astar.findBestPathToTargets(
+        { x: 0, y: 0 },
+        targets,
+        gameState
+      );
       expect(path).not.toBeNull();
       // Should choose the closest food (2,2) when health is high
       expect(path[path.length - 1]).toEqual({ x: 2, y: 2 });
     });
   });
-}); 
+});
