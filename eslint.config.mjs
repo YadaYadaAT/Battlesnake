@@ -3,6 +3,7 @@ import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
+import jestPlugin from 'eslint-plugin-jest';
 import eslintComments from 'eslint-plugin-eslint-comments';
 import { defineConfig } from 'eslint/config';
 
@@ -39,7 +40,7 @@ export default defineConfig([
   {
     files: ['**/*.test.{js,mjs,cjs}', '**/__tests__/**/*.{js,mjs,cjs}'],
     plugins: {
-      jest: require('eslint-plugin-jest')
+      jest: jestPlugin
     },
     languageOptions: {
       globals: {
@@ -49,8 +50,8 @@ export default defineConfig([
       },
       sourceType: 'module'
     },
-    extends: ['plugin:jest/recommended'],
     rules: {
+      ...jestPlugin.configs.recommended.rules,
       'jest/no-disabled-tests': 'warn',
       'jest/expect-expect': 'warn',
       'jest/valid-title': 'error',
@@ -60,8 +61,7 @@ export default defineConfig([
       'jest/prefer-to-be': 'warn',
       'jest/prefer-to-have-length': 'warn',
       'jest/valid-expect-in-promise': 'error',
-      'jest/require-top-level-describe': 'error',
-      'no-magic-numbers': ['error', { ignore: [-1, 0, 1] }]
+      'jest/require-top-level-describe': 'error'
     }
   }
 ]);
