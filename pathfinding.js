@@ -1,12 +1,12 @@
 /**
  * A* Pathfinding Implementation for Battlesnake
- * 
+ *
  * This module implements the A* pathfinding algorithm for efficient navigation
  * in the Battlesnake game. It helps the snake find optimal paths to:
  * 1. Food items while avoiding obstacles
  * 2. Smaller snakes for hunting
  * 3. Safe spaces when in danger
- * 
+ *
  * The A* algorithm combines:
  * - g(n): Cost from start to current node
  * - h(n): Heuristic estimate to goal
@@ -19,13 +19,13 @@
  */
 class Node {
   constructor(x, y, walkable = true) {
-    this.x = x;                    // X coordinate in the grid
-    this.y = y;                    // Y coordinate in the grid
-    this.walkable = walkable;      // Whether the snake can move through this cell
-    this.g = 0;                    // Cost from start to this node
-    this.h = 0;                    // Heuristic cost from this node to end
-    this.f = 0;                    // Total cost (g + h)
-    this.parent = null;            // Reference to previous node in the path
+    this.x = x; // X coordinate in the grid
+    this.y = y; // Y coordinate in the grid
+    this.walkable = walkable; // Whether the snake can move through this cell
+    this.g = 0; // Cost from start to this node
+    this.h = 0; // Heuristic cost from this node to end
+    this.f = 0; // Total cost (g + h)
+    this.parent = null; // Reference to previous node in the path
   }
 
   /**
@@ -51,7 +51,7 @@ class AStar {
     this.board = board;
     this.width = board.width;
     this.height = board.height;
-    this.grid = this.initializeGrid();  // Create the initial empty grid
+    this.grid = this.initializeGrid(); // Create the initial empty grid
   }
 
   /**
@@ -88,9 +88,14 @@ class AStar {
     }
 
     // Mark all snake bodies as unwalkable
-    gameState.board.snakes.forEach(snake => {
-      snake.body.forEach(part => {
-        if (part.x >= 0 && part.x < this.width && part.y >= 0 && part.y < this.height) {
+    gameState.board.snakes.forEach((snake) => {
+      snake.body.forEach((part) => {
+        if (
+          part.x >= 0 &&
+          part.x < this.width &&
+          part.y >= 0 &&
+          part.y < this.height
+        ) {
           this.grid[part.x][part.y].walkable = false;
         }
       });
@@ -107,10 +112,10 @@ class AStar {
     const neighbors = [];
     // Define possible movement directions (up, down, left, right)
     const directions = [
-      { x: 0, y: 1 },   // up
-      { x: 0, y: -1 },  // down
-      { x: -1, y: 0 },  // left
-      { x: 1, y: 0 }    // right
+      { x: 0, y: 1 }, // up
+      { x: 0, y: -1 }, // down
+      { x: -1, y: 0 }, // left
+      { x: 1, y: 0 } // right
     ];
 
     // Check each direction
@@ -119,9 +124,13 @@ class AStar {
       const newY = node.y + dir.y;
 
       // Only add if the neighbor is within bounds and walkable
-      if (newX >= 0 && newX < this.width && 
-          newY >= 0 && newY < this.height && 
-          this.grid[newX][newY].walkable) {
+      if (
+        newX >= 0 &&
+        newX < this.width &&
+        newY >= 0 &&
+        newY < this.height &&
+        this.grid[newX][newY].walkable
+      ) {
         neighbors.push(this.grid[newX][newY]);
       }
     }
@@ -148,8 +157,8 @@ class AStar {
    */
   findPath(start, end) {
     // Initialize open and closed sets
-    const openSet = [this.grid[start.x][start.y]];  // Nodes to be evaluated
-    const closedSet = new Set();                     // Nodes already evaluated
+    const openSet = [this.grid[start.x][start.y]]; // Nodes to be evaluated
+    const closedSet = new Set(); // Nodes already evaluated
 
     while (openSet.length > 0) {
       // Find node with lowest f score
@@ -173,15 +182,15 @@ class AStar {
 
       // Check all neighbors
       for (const neighbor of this.getNeighbors(current)) {
-        if (closedSet.has(neighbor)) continue;  // Skip if already evaluated
+        if (closedSet.has(neighbor)) continue; // Skip if already evaluated
 
-        const tentativeG = current.g + 1;  // Cost to reach neighbor through current
+        const tentativeG = current.g + 1; // Cost to reach neighbor through current
 
         // Add to open set if new node or better path found
         if (!openSet.includes(neighbor)) {
           openSet.push(neighbor);
         } else if (tentativeG >= neighbor.g) {
-          continue;  // Skip if this path is not better
+          continue; // Skip if this path is not better
         }
 
         // Update neighbor's pathfinding data
@@ -192,7 +201,7 @@ class AStar {
       }
     }
 
-    return null;  // No path found
+    return null; // No path found
   }
 
   /**
@@ -223,7 +232,7 @@ class AStar {
    */
   findBestPathToTargets(start, targets, gameState) {
     this.updateGrid(gameState);
-    
+
     let bestPath = null;
     let bestScore = Infinity;
 
@@ -269,7 +278,7 @@ class AStar {
       const targetLength = target.snake.body.length;
       if (myLength > targetLength) {
         // Prioritize shorter snakes (lower score is better)
-        score *= (targetLength / myLength);
+        score *= targetLength / myLength;
       }
     }
 
@@ -280,4 +289,4 @@ class AStar {
 module.exports = {
   AStar,
   Node
-}; 
+};

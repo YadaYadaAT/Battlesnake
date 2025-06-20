@@ -17,7 +17,10 @@ describe('Battlesnake core functions', () => {
     const gameState = {
       you: {
         id: 'snake-1',
-        body: [{ x: 5, y: 5 }, { x: 5, y: 4 }],
+        body: [
+          { x: 5, y: 5 },
+          { x: 5, y: 4 }
+        ],
         length: 3
       },
       board: {
@@ -27,15 +30,21 @@ describe('Battlesnake core functions', () => {
         snakes: [
           {
             id: 'snake-1',
-            body: [{ x: 5, y: 5 }, { x: 5, y: 4 }],
+            body: [
+              { x: 5, y: 5 },
+              { x: 5, y: 4 }
+            ]
           },
           {
             id: 'snake-2',
-            body: [{ x: 3, y: 3 }, { x: 3, y: 2 }],
+            body: [
+              { x: 3, y: 3 },
+              { x: 3, y: 2 }
+            ]
           }
-        ],
+        ]
       },
-      turn: 0,
+      turn: 0
     };
     const moveResponse = move(gameState);
     expect(moveResponse).toHaveProperty('move');
@@ -55,7 +64,7 @@ describe('Flood fill algorithm', () => {
   const createBoard = (snakeBodies = []) => ({
     width: boardWidth,
     height: boardHeight,
-    snakes: snakeBodies.map((body, idx) => ({ id: `snake-${idx}`, body })),
+    snakes: snakeBodies.map((body, idx) => ({ id: `snake-${idx}`, body }))
   });
 
   test('flood fill returns full area if no obstacles', () => {
@@ -66,7 +75,11 @@ describe('Flood fill algorithm', () => {
   });
 
   test('flood fill respects snake bodies as obstacles', () => {
-    const snakeBody = [{ x: 2, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 2 }];
+    const snakeBody = [
+      { x: 2, y: 2 },
+      { x: 2, y: 3 },
+      { x: 3, y: 2 }
+    ];
     const board = createBoard([snakeBody]);
     const start = { x: 0, y: 0 };
     const result = floodFill(board, start);
@@ -84,7 +97,10 @@ describe('Flood fill algorithm', () => {
   });
 
   test('flood fill handles edges correctly', () => {
-    const snakeBody = [{ x: 0, y: 0 }, { x: 0, y: 1 }];
+    const snakeBody = [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 }
+    ];
     const board = createBoard([snakeBody]);
     const start = { x: 1, y: 0 };
     const result = floodFill(board, start);

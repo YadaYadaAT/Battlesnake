@@ -11,7 +11,7 @@ beforeAll(async () => {
     info: () => 'Hello from Battlesnake!',
     start: jest.fn(),
     move: jest.fn(() => ({ move: 'up' })),
-    end: jest.fn(),
+    end: jest.fn()
   };
 
   port = await runServer(handlers, 0);
