@@ -1,6 +1,6 @@
 {
   "name": "battlesnake",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "This repository contains the source code and configuration for our Battlesnake game. The project is focused on implementing continuous integration and delivery (CI/CD) pipelines using GitHub Actions, with issue tracking and agile methodologies supported by YouTrack integration.",
   "main": "index.js",
   "scripts": {
