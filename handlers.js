@@ -33,17 +33,183 @@ function end(gameState) {
 }
 
 /**
- * GameStateEvaluator - Comprehensive game state evaluation system
- * 
- * This class provides methods to evaluate the current game state using multiple factors:
- * 1. Health and Survival Metrics
- * 2. Food Accessibility
- * 3. Space Control
- * 4. Threat Assessment
- * 5. Position Analysis
- * 6. Path Safety
- * 
- * Each factor is weighted and normalized to provide a complete evaluation of the game state.
+ * Simulates a move and returns the resulting game state
+ * @param {Object} gameState - Current game state
+ * @param {string} move - Direction to move ('up', 'down', 'left', 'right')
+ * @returns {Object} Simulated game state after the move
+ */
+function simulateMove(gameState, move) {
+  // Create a deep copy of the game state
+  const newState = JSON.parse(JSON.stringify(gameState));
+  const mySnake = newState.you;
+  const myHead = mySnake.body[0];
+  
+  // Calculate new head position
+  let newHead;
+  switch(move) {
+    case 'up': newHead = { x: myHead.x, y: myHead.y + 1 }; break;
+    case 'down': newHead = { x: myHead.x, y: myHead.y - 1 }; break;
+    case 'left': newHead = { x: myHead.x - 1, y: myHead.y }; break;
+    case 'right': newHead = { x: myHead.x + 1, y: myHead.y }; break;
+  }
+
+  // Update snake body
+  mySnake.body.unshift(newHead);
+  
+  // Check if food was eaten
+  const foodEaten = newState.board.food.some(food => 
+    food.x === newHead.x && food.y === newHead.y
+  );
+  
+  if (foodEaten) {
+    // Remove eaten food
+    newState.board.food = newState.board.food.filter(food => 
+      !(food.x === newHead.x && food.y === newHead.y)
+    );
+    // Reset health and don't remove tail
+    mySnake.health = 100;
+  } else {
+    // Remove tail if no food eaten
+    mySnake.body.pop();
+    // Decrease health
+    mySnake.health -= 1;
+  }
+
+  // Update turn number
+  newState.turn += 1;
+  
+  return newState;
+}
+
+/**
+ * Evaluates a game state and returns a score
+ * @param {Object} gameState - Game state to evaluate
+ * @returns {number} Score for the game state (higher is better)
+ */
+function evaluateGameState(gameState) {
+  const mySnake = gameState.you;
+  const myHead = mySnake.body[0];
+  let score = 0;
+
+  // Factor 1: Health status (0-100 points)
+  score += mySnake.health;
+
+  // Factor 2: Available space (0-100 points)
+  const availableSpace = floodFill(gameState.board, myHead);
+  score += Math.min(availableSpace * 2, 100); // Cap at 100 points
+
+  // Factor 3: Distance to food (0-50 points)
+  if (gameState.board.food.length > 0) {
+    const closestFood = gameState.board.food.reduce((closest, food) => {
+      const distance = Math.abs(food.x - myHead.x) + Math.abs(food.y - myHead.y);
+      return distance < closest.distance ? { food, distance } : closest;
+    }, { distance: Infinity, food: null });
+    
+    if (closestFood.food) {
+      score += Math.max(50 - closestFood.distance * 5, 0);
+    }
+  }
+
+  // Factor 4: Hunting opportunities (0-50 points)
+  const nearbySmallerSnakes = findNearbySmallerSnakes(gameState, myHead);
+  score += Math.min(nearbySmallerSnakes.length * 25, 50);
+
+  // Factor 5: Safety from larger snakes (-50 to 0 points)
+  gameState.board.snakes.forEach(snake => {
+    if (snake.id !== mySnake.id && snake.body.length > mySnake.body.length) {
+      const distance = Math.abs(snake.body[0].x - myHead.x) + Math.abs(snake.body[0].y - myHead.y);
+      if (distance <= 2) {
+        score -= 25; // Penalize being close to larger snakes
+      }
+    }
+  });
+
+  return score;
+}
+
+/**
+ * Looks ahead multiple moves to find the best move
+ * @param {Object} gameState - Current game state
+ * @param {number} depth - How many moves to look ahead
+ * @returns {string} Best move to make
+ */
+function lookAhead(gameState, depth = 2) {
+  const possibleMoves = ['up', 'down', 'left', 'right'];
+  let bestScore = -Infinity;
+  let bestMove = null;
+
+  // Evaluate each possible move
+  for (const move of possibleMoves) {
+    // Skip invalid moves
+    if (!isMoveSafe(gameState, move)) continue;
+
+    // Simulate the move
+    const newState = simulateMove(gameState, move);
+    
+    // If we're at max depth, just evaluate the resulting state
+    if (depth === 1) {
+      const score = evaluateGameState(newState);
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = move;
+      }
+    } else {
+      // Look ahead further
+      const nextMove = lookAhead(newState, depth - 1);
+      if (nextMove) {
+        const nextState = simulateMove(newState, nextMove);
+        const score = evaluateGameState(nextState);
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = move;
+        }
+      }
+    }
+  }
+
+  return bestMove;
+}
+
+/**
+ * Checks if a move is safe in the current game state
+ * @param {Object} gameState - Current game state
+ * @param {string} move - Move to check
+ * @returns {boolean} Whether the move is safe
+ */
+function isMoveSafe(gameState, move) {
+  const myHead = gameState.you.body[0];
+  let newHead;
+
+  // Calculate new head position
+  switch(move) {
+    case 'up': newHead = { x: myHead.x, y: myHead.y + 1 }; break;
+    case 'down': newHead = { x: myHead.x, y: myHead.y - 1 }; break;
+    case 'left': newHead = { x: myHead.x - 1, y: myHead.y }; break;
+    case 'right': newHead = { x: myHead.x + 1, y: myHead.y }; break;
+  }
+
+  // Check board boundaries
+  if (newHead.x < 0 || newHead.x >= gameState.board.width ||
+      newHead.y < 0 || newHead.y >= gameState.board.height) {
+    return false;
+  }
+
+  // Check collision with snakes
+  for (const snake of gameState.board.snakes) {
+    for (const part of snake.body) {
+      if (part.x === newHead.x && part.y === newHead.y) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Determines the next move based on the current game state.
+ * @param {Object} gameState - The current game state provided by the Battlesnake engine.
+ * @returns {{move: string}} The direction to move.
  */
 class GameStateEvaluator {
   constructor(gameState) {
@@ -431,15 +597,18 @@ class GameStateEvaluator {
 }
 
 function move(gameState) {
-  const evaluator = new GameStateEvaluator(gameState);
-  const evaluation = evaluator.evaluateGameState();
+  console.log(`MOVE ${gameState.turn}: Looking ahead for best move`);
   
-  // Log evaluation results
-  console.log('Game State Evaluation:');
-  console.log(`Overall Score: ${evaluation.overallScore.toFixed(2)}`);
-  console.log('Recommendations:', evaluation.recommendations);
+  // Use look-ahead to find the best move
+  const lookAheadMove = lookAhead(gameState, 2);
   
-  // Use evaluation to make decisions
+  if (lookAheadMove) {
+    console.log(`MOVE ${gameState.turn}: Found best move through look-ahead`);
+    return { move: lookAheadMove };
+  }
+
+  // Fallback to original move logic if look-ahead fails
+  console.log(`MOVE ${gameState.turn}: Falling back to original move logic`);
   const myHead = gameState.you.body[0];
   const myNeck = gameState.you.body[1];
   // const myLength = gameState.you.body.length;
@@ -488,7 +657,7 @@ function move(gameState) {
     });
   });
 
-  // Avoid all snakes
+  //  // Avoid own body and other snakes
   gameState.board.snakes.forEach((snake) => {
     snake.body.forEach((part) => {
       Object.entries(possibleMoves).forEach(([dir, move]) => {
@@ -546,9 +715,8 @@ function move(gameState) {
   
   // If we found smaller snakes nearby, prioritize hunting
   if (nearbySmallerSnakes.length > 0) {
-    const targetSnake = nearbySmallerSnakes[0]; // Target the closest smaller snake
+    const targetSnake = nearbySmallerSnakes[0];
     
-    // Evaluate each possible move for hunting effectiveness
     Object.entries(possibleMoves).forEach(([direction, move]) => {
       if (move.safe) {
         // Check if this move would be good for hunting
@@ -561,13 +729,12 @@ function move(gameState) {
       }
     });
 
-    // Filter safe moves and sort by hunting score
-    const safeMoves = Object.entries(possibleMoves)
+    const huntingMoves = Object.entries(possibleMoves)
       .filter(([_, move]) => move.safe)
       .sort(([_, a], [__, b]) => (b.huntingScore || 0) - (a.huntingScore || 0));
 
-    if (safeMoves.length > 0) {
-      const nextMove = safeMoves[0][0];
+    if (huntingMoves.length > 0) {
+      const nextMove = huntingMoves[0][0];
       console.log(`MOVE ${gameState.turn}: Hunting smaller snake! Moving ${nextMove}`);
       return { move: nextMove };
     }
@@ -618,8 +785,8 @@ function move(gameState) {
       x: food.x,
       y: food.y,
       food: true,
-      priority: gameState.you.health < 50 ? 1 : 2,  // Higher priority when health is low
-      area: foodArea  // Add flood fill area for path evaluation
+      priority: gameState.you.health < 50 ? 1 : 2,
+      area: foodArea
     });
   });
 
@@ -653,8 +820,8 @@ function move(gameState) {
           x: snake.body[0].x,
           y: snake.body[0].y,
           snake: snake,
-          priority: 1,  // Highest priority for hunting when health is good
-          area: snakeArea  // Add flood fill area for path evaluation
+          priority: 1,
+          area: snakeArea
         });
       }
     });
@@ -694,53 +861,26 @@ function move(gameState) {
     
     // Verify the move is still safe and leads to a good area
     if (safeMoves.includes(moveDirection)) {
-//       console.log(`MOVE ${gameState.turn}: Following A* path to target`);
-//       return { move: moveDirection };
-//     }
-//   }
-//  // Are there any safe moves left?
-// //  const safeMoves = Object.keys(possibleMoves).filter(
-// //   (key) => possibleMoves[key].safe
-// // );
-// // if (safeMoves.length == 0) {
-// //   console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
-// //   return { move: 'down' };
-// // }
-//   // Fallback to random safe move if no good path found
-//   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
-//   console.log(`MOVE ${gameState.turn}: No good path found, moving randomly`);
-//   return { move: nextMove };
-// }
-const nextArea = floodFill(gameState.board, nextPosition);
-// Only take the path if it leads to a reasonable area
-if (nextArea > 3) {  // Minimum area threshold
-  console.log(`MOVE ${gameState.turn}: Following A* path to target`);
-  return { move: moveDirection };
-}
-}
-}
+      const nextArea = floodFill(gameState.board, nextPosition);
+      if (nextArea > 3) {
+        console.log(`MOVE ${gameState.turn}: Following A* path to target`);
+        return { move: moveDirection };
+      }
+    }
+  }
 
-  // If no good path found, choose the safe move with the largest flood fill area
-  let bestMove = safeMoves[0];
+  let safestMove = safeMoves[0];
   let bestArea = 0;
 
-  // When choosing the next move, use the evaluation
-  if (safeMoves.length > 0) {
-    // Get path safety evaluation for each safe move
-    const moveEvaluations = safeMoves.map(direction => {
-      const newPos = evaluator.calculateNewPosition(myHead, direction);
-      const pathSafety = evaluator.evaluatePathSafety();
-      const moveScore = pathSafety.paths.find(p => p.direction === direction)?.score || 0;
-      
-      return { direction, score: moveScore };
-    });
-
-    // Sort moves by score and choose the best one
-    moveEvaluations.sort((a, b) => b.score - a.score);
-    const bestMove = moveEvaluations[0];
-    
-    console.log(`Selected move ${bestMove.direction} with score ${bestMove.score.toFixed(2)}`);
-    return { move: bestMove.direction };
+  // Choose a random move from the safe moves
+  //   const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
+  for (const move of safeMoves) {
+    const nextPos = possibleMoves[move];
+    const area = floodFill(gameState.board, nextPos);
+    if (area > bestArea) {
+      bestArea = area;
+      safestMove = move;
+    }
   }
 
   // Move toward food (Manhattan distance)
@@ -828,7 +968,7 @@ if (nextArea > 3) {  // Minimum area threshold
   // console.log(`MOVE ${gameState.turn}: ${nextMove}`);
   // return { move: nextMove };
   console.log(`MOVE ${gameState.turn}: No good path found, choosing safest move`);
-  return { move: bestMove };
+  return { move: nextMove || safestMove };
 }
 
 /**
