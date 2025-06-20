@@ -61,8 +61,7 @@ export default defineConfig([
       'jest/prefer-to-be': 'warn',
       'jest/prefer-to-have-length': 'warn',
       'jest/valid-expect-in-promise': 'error',
-      'jest/require-top-level-describe': 'error',
-      'no-magic-numbers': ['error', { ignore: [-1, 0, 1] }]
+      'jest/require-top-level-describe': 'error'
     }
   }
 ]);

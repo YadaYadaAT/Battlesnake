@@ -5,20 +5,20 @@ const { runServer } = require('../server'); // adjust path if needed
 let port;
 let baseUrl;
 
-beforeAll(async () => {
-  // mock handler functions
-  const handlers = {
-    info: () => 'Hello from Battlesnake!',
-    start: jest.fn(),
-    move: jest.fn(() => ({ move: 'up' })),
-    end: jest.fn()
-  };
-
-  port = await runServer(handlers, 0);
-  baseUrl = `http://localhost:${port}`;
-});
-
 describe('Server routes', () => {
+  beforeAll(async () => {
+    //mock handler functions
+    const handlers = {
+      info: () => 'Hello from Battlesnake!',
+      start: jest.fn(),
+      move: jest.fn(() => ({ move: 'up' })),
+      end: jest.fn()
+    };
+
+    port = await runServer(handlers, 0);
+    baseUrl = `http://localhost:${port}`;
+  });
+
   test('GET / should return info', async () => {
     const response = await axios.get(`${baseUrl}/`);
     expect(response.status).toBe(200);
