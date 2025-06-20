@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/YadaYadaAT/Battlesnake/compare/v1.1.0...v2.0.0) (2025-06-20)
+
+
+### Features
+
+* add jsdoc comments in code ([ea0d487](https://github.com/YadaYadaAT/Battlesnake/commit/ea0d487e3843106146005dee19937148f5ef454e)), closes [#BJ-16](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-16)
+* add to heuristic method the ability to lookahead and evaluate future ([61774a2](https://github.com/YadaYadaAT/Battlesnake/commit/61774a26210004234ef5a64796c44c934971fca2)), closes [#BJ-40](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-40)
+* **ci:** add ci pipeline for test, deploy, lint ([3b0662a](https://github.com/YadaYadaAT/Battlesnake/commit/3b0662a6515d1b602416a3bb95390b380fb1f7bc)), closes [#BJ-21](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-21) [#BJ-20](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-20)
+* create and use A* algorithm for searching food and for hunting ([cf65dc4](https://github.com/YadaYadaAT/Battlesnake/commit/cf65dc46555be907c184e40622a6b31e112589e6)), closes [#BJ-38](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-38)
+* **dependabot:** add configuration for npm dependency updates ([fff4206](https://github.com/YadaYadaAT/Battlesnake/commit/fff4206d3c0229f2e206b488e16aec0599912c2b))
+* develop a heuristic method that evaluates each game state ([586720f](https://github.com/YadaYadaAT/Battlesnake/commit/586720f5a829f0991dfc78b3b06333662e2d594e)), closes [#BJ-39](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-39)
+* **docs:** commit the html page folder (out) from jsdoc ([095f847](https://github.com/YadaYadaAT/Battlesnake/commit/095f84727fb3f6bfeee342e16ea5994980eb8a34)), closes [#BJ-17](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-17)
+* fix snakes ability to hunt and kill smaller snakes ([5934f7a](https://github.com/YadaYadaAT/Battlesnake/commit/5934f7aac1fc94eff0a7ca39bdb3b3d904affd76)), closes [#BJ-19](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-19)
+* install jsdoc ([4fe5626](https://github.com/YadaYadaAT/Battlesnake/commit/4fe5626e91ae53b0dad94c16e5c6660c6c1feead)), closes [#BJ-16](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-16)
+* refine snake movement and eating logic ([9ff8f31](https://github.com/YadaYadaAT/Battlesnake/commit/9ff8f317fe6da256c30320256480dd01d8b89656))
+* separate movement logic and add more tests ([f188d10](https://github.com/YadaYadaAT/Battlesnake/commit/f188d10edf9e56b2907ce55535c6d5a91ed11b9c))
+* support small and large map sizes ([24dd5d4](https://github.com/YadaYadaAT/Battlesnake/commit/24dd5d47558ca82f68f3cd8f71625357c423ae49)), closes [#BJ-43](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-43)
+* update README.md ([be61874](https://github.com/YadaYadaAT/Battlesnake/commit/be6187478c92e56c49518f0268d4472f74cc7653)), closes [#BJ-18](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-18)
+
+
+### Bug Fixes
+
+* **ci:** remove non-working coverage script ([616ae09](https://github.com/YadaYadaAT/Battlesnake/commit/616ae09e40e86109140ab0c83ec7964f573bb020))
+* **customization:** change snakes names ([c93181a](https://github.com/YadaYadaAT/Battlesnake/commit/c93181a4ae6668250fb8596876073530f384db14))
+* fix README badges ([5df65ce](https://github.com/YadaYadaAT/Battlesnake/commit/5df65cec351302d06090b454b390186c8c6d26b3)), closes [#BJ-18](https://github.com/YadaYadaAT/Battlesnake/issues/BJ-18)
+* small name change hotfix ([e1f538a](https://github.com/YadaYadaAT/Battlesnake/commit/e1f538ac4c393214d7da8da16bdb561237741c42))
+* **test:** fix minor test issues before pushing final ci ([87aa3dc](https://github.com/YadaYadaAT/Battlesnake/commit/87aa3dcd0680a85f90e89a0a7bb26c45e504ba8e))
+
 ## [1.1.0](https://github.com/YadaYadaAT/Battlesnake/compare/v1.0.2...v1.1.0) (2025-05-22)
 
 
