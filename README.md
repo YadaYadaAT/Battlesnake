@@ -15,7 +15,8 @@ Welcome to the **Battlesnake CI/CD Automation** repository! This project is part
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)  
+- [About the Project](#about-the-project)
+- [Agility](#agility)  
 - [Technologies](#technologies)  
 - [Getting Started](#getting-started)  
 - [Running the Game](#running-the-game)  
@@ -30,6 +31,18 @@ Welcome to the **Battlesnake CI/CD Automation** repository! This project is part
 
 This project demonstrates how to develop a Battlesnake bot while implementing a full CI/CD pipeline using **GitHub Actions**. It also incorporates **YouTrack** for agile issue and sprint management, helping us maintain a structured and efficient workflow.
 
+To help us automate and control our work, we used Conventional Commits and Conventional Changelog, along with Husky to enforce adherence to Conventional Commits standards and rules. Developers are unable to commit changes unless they adhere to the conventional commit rules.
+
+We also use Standard Version to automate versioning and changelog generation. 
+
+JSDocs is used for documentation.
+
+ESLint and Prettier are used to lint codebase and ensure consistency.
+
+Jest is used for testing and coverage checks.
+
+Our 'main' and 'develop' branches are protected by GitHub rulesets, to ensure safety. 
+
 Goals and learning outcomes include:
 
 - Automating testing and linting on each commit and pull request with GitHub Actions.  
@@ -37,6 +50,35 @@ Goals and learning outcomes include:
 - Managing development sprints and issues with YouTrack.  
 - Writing clean, maintainable JavaScript code for game logic following Battlesnake API conventions.  
 - Applying Agile principles in a real-world software project environment.  
+
+---
+
+## Agility
+
+Before beginning our work on the project, we broke down all the possible issues we would have to tackle, and created a Gantt chart on YouTrack:
+
+![Gantt](./images/gantt.png)
+
+We ended up not using the Gantt chart itself, but it was a good introduction to the project.
+
+In order to keep track of everyone's work, we created a YouTrack Agile Board and split the four iterations into four sprints:
+
+![Sprint 1](./images/spr1.png)
+![Sprint 2](./images/spr2.png)
+![Sprint 3](./images/spr3.png)
+![Sprint 4](./images/spr4after.png)
+
+Each one of us got assigned tasks, which were split into Epics, Tasks, Subtasks, or Organizational tasks, for consistency. 
+
+For the final part of the process, labeled 'extras', we used the backlog...
+
+![Backlog](./images/spr4b4.png)
+
+...and every time we had some extra time on our hands, we pulled issues out of the backlog and worked on them during our sprints!
+
+We ensured that the issues were tracked automatically by YouTrack by using a 'refs' section at the end of each of our commits. Thus, under the description of each issue, one can see all the commits related to it that have been pushed to GitHub:
+
+![Issues](./images/issue-track.png)
 
 ---
 
