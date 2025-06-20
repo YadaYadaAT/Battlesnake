@@ -286,7 +286,5 @@ class AStar {
   }
 }
 
-module.exports = {
-  AStar,
-  Node
-};
+exports.AStar = AStar;
+exports.Node = Node;

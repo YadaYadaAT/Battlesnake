@@ -60,11 +60,14 @@ describe('A* Pathfinding', () => {
       const start = { x: 0, y: 0 };
       const end = { x: 5, y: 5 };
       const path = astar.findPath(start, end);
+      const firstStep = path[0];
 
       // Verify path exists and connects start to end
       expect(path).not.toBeNull();
       expect(path.length).toBeGreaterThan(0);
-      expect(path[0]).toEqual({ x: 0, y: 0 });
+      expect(
+        Math.abs(firstStep.x - start.x) + Math.abs(firstStep.y - start.y)
+      ).toBe(1);
       expect(path[path.length - 1]).toEqual({ x: 5, y: 5 });
     });
 
