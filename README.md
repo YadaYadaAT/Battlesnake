@@ -1,72 +1,107 @@
 # Battlesnake CI/CD Automation
 
-![Build Status]()
-![Lint Status]()
+![Build Status](https://img.shields.io/github/actions/workflow/status/YadaYadaAT/Battlesnake/ci.yml?branch=main)  
+![Lint Status](https://img.shields.io/github/actions/workflow/status/YadaYadaAT/Battlesnake/lint.yml?branch=main)
 
-Welcome to the **Battlesnake CI/CD Automation** repository! This project is a part of our university coursework, where we not only build a fun and competitive Battlesnake game, but also learn how to integrate key DevOps principles like continuous integration, continuous delivery, and agile issue tracking. 
+Welcome to the **Battlesnake CI/CD Automation** repository! This project is part of our university coursework where we combine competitive game development with hands-on DevOps experience. Here, we build a Battlesnake bot and integrate modern development practices including continuous integration, continuous delivery, and agile issue tracking.
+
+---
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
-- [Technologies](#technologies)
-- [Getting Started](#getting-started)
-- [Running the Game](#running-the-game)
-- [Contributing](#contributing)
-- [Acknowledgements](#acknowledgements)
+- [About the Project](#about-the-project)  
+- [Technologies](#technologies)  
+- [Getting Started](#getting-started)  
+- [Running the Game](#running-the-game)  
+- [Project Structure](#project-structure)  
+- [Testing](#testing)  
+- [Acknowledgments](#acknowledgments)  
 
 ---
 
 ## About the Project
 
-In this project, we configure our Battlesnake game while setting up CI/CD pipelines using GitHub Actions. We aim to streamline our development process by integrating **YouTrack** for issue management, ensuring that each sprint is efficient and well-organized. Through this project, we will:
-- Learn how to use **GitHub Actions** for continuous integration and delivery.
-- Track our work and sprints using **YouTrack**.
-- Develop our Battlesnake game following agile methodologies.
-- Reflect on our progress and deliver comprehensive reports on the development lifecycle.
+This project demonstrates how to develop a Battlesnake bot while implementing a full CI/CD pipeline using **GitHub Actions**. It also incorporates **YouTrack** for agile issue and sprint management, helping us maintain a structured and efficient workflow.
 
-This project is configured to run CI pipelines using Github Actions, ensuring that:
-- Code is linted with ESLint.
-- All tests are automatically run on every push and pull request.
+Goals and learning outcomes include:
+
+- Automating testing and linting on each commit and pull request with GitHub Actions.  
+- Implementing continuous delivery to deploy the Battlesnake server seamlessly.  
+- Managing development sprints and issues with YouTrack.  
+- Writing clean, maintainable JavaScript code for game logic following Battlesnake API conventions.  
+- Applying Agile principles in a real-world software project environment.  
+
+---
 
 ## Technologies
 
-This project makes use of the following technologies:
-- **Battlesnake Game API**
-- **GitHub Actions** for CI/CD
-- **YouTrack** for issue and sprint management
-- **JavaScript** for the Battlesnake logic
-- **ESLint** for code linting
-- **Node.js** for backend support and testing
+- **Battlesnake Game API** — The core API to interact with the Battlesnake game engine.  
+- **Node.js** — Backend runtime environment for running the Battlesnake server.  
+- **JavaScript** — Programming language used to develop game logic and utility functions.  
+- **GitHub Actions** — CI/CD automation for linting, testing, and deployment.  
+- **YouTrack** — Agile project management for issue tracking and sprint planning.  
+- **ESLint** — Code quality and style enforcement tool.
+
+---
 
 ## Getting Started
 
-To get a local copy of the project up and running, follow these steps:
-
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) installed on your machine.
+- [Node.js](https://nodejs.org/) v14 or later  
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 
 ### Installation
 
-1. **Clone the repository:**
-   ```
+1. Clone the repo:  
+   ```bash
    git clone https://github.com/YadaYadaAT/Battlesnake.git
    cd Battlesnake
    ```
-2. **Install dependencies:**
-   ```
-   npm install
-   ```
-3. **Set up environment variables:** Create a .env file in the root directory and add any necessary environment variables based on your setup.
+2. Install dependencies:
+   ```npm install```
+3. Configure environment variables:
+   Create a .env file in the root directory to specify any environment-specific variables your setup requires (e.g., port number).
+
+
+---
 
 ## Running the Game
 
-To start your Battlesnake server locally:
-```
+To launch the Battlesnake server locally:
+
+```bash
 npm run dev --snakes <number-of-snakes>
 ```
-The <number-of-snakes> argument should be an integer number up to 6.
 
-## Contributing 
+Replace `<number-of-snakes>` with an integer up to 6 to specify how many snake instances the server should simulate.
+
+---
+
+## Project Structure
+
+- `handlers.js` — Core game logic including API handlers for move, start, end, and info.  
+- `index.js` — Entry point for the Battlesnake server.  
+- `tests/` — Contains unit and integration tests for core logic and utilities.  
+- `.github/workflows/` — GitHub Actions workflows for CI/CD automation.  
+- `.eslintrc.js` — ESLint configuration file for enforcing code style.
+
+---
+
+## Testing
+
+Run all tests with:
+
+```bash
+npm test
+```
+
+Tests include validation of game logic, flood fill pathfinding, and core Battlesnake API handlers. The CI pipeline runs tests automatically on every commit.
+
+---
 
 ## Acknowledgments
+
+- The Battlesnake community and official documentation for guidance on building bots.  
+- Our university instructors and classmates for collaboration and feedback.  
+- Open-source projects like ESLint and GitHub Actions for tooling support.
