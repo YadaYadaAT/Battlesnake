@@ -14,7 +14,8 @@
     "upload-coverage": "npx codecov",
     "test:watch": "jest --watch --coverage",
     "lint": "eslint . --fix",
-    "start:ci": "node index.js 0"
+    "start:ci": "node index.js 0",
+    "docs": "jsdoc handlers.js"
   },
   "keywords": [],
   "author": "",
