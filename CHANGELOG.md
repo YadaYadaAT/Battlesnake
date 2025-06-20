@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/YadaYadaAT/Battlesnake/compare/v2.0.2...v2.0.3) (2025-06-20)
+
+
+### Bug Fixes
+
+* **ci:** fix railway script & small README.md change ([eca5cce](https://github.com/YadaYadaAT/Battlesnake/commit/eca5cce5708b9d81373056cdb97a5df2b8db61c3))
+
 ### [2.0.2](https://github.com/YadaYadaAT/Battlesnake/compare/v2.0.1...v2.0.2) (2025-06-20)
 
 
