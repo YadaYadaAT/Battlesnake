@@ -21,6 +21,7 @@ Welcome to the **Battlesnake CI/CD Automation** repository! This project is part
 
 ## About the Project
 
+
 This project demonstrates how to develop a Battlesnake bot while implementing a full CI/CD pipeline using **GitHub Actions**. It also incorporates **YouTrack** for agile issue and sprint management, helping us maintain a structured and efficient workflow.
 
 Goals and learning outcomes include:
