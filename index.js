@@ -25,15 +25,29 @@ const numSnakes = Number(process.argv[2]) || 1;
 const boardWidth = Number(process.argv[3]) || 11;  // Default to standard 11x11 board
 const boardHeight = Number(process.argv[4]) || 11; // Default to standard 11x11 board
 
+/**
+ * Stores promises for starting multiple Battlesnake servers.
+ * @type {Promise<number>[]}
+ */
 let serverPromises = [];
 
 for (let i = 0; i < numSnakes; i++) {
   serverPromises.push(
     runServer(
       {
+        /**
+         * Get snake info based on index.
+         * @returns {Object}
+         */
         info: () => handlers.info(i),
+
+        /** @param {Object} gameState */
         start: handlers.start,
+
+        /** @param {Object} gameState */
         move: handlers.move,
+
+        /** @param {Object} gameState */
         end: handlers.end
       },
       i
@@ -42,6 +56,10 @@ for (let i = 0; i < numSnakes; i++) {
 }
 
 Promise.all(serverPromises).then((ports) => {
+  /**
+   * Construct the --name and --url arguments for the battlesnake CLI.
+   * @type {string}
+   */
   const args = ports
     .map(
       (port, idx) =>
@@ -51,6 +69,10 @@ Promise.all(serverPromises).then((ports) => {
 
   const isWindows = platform() === 'win32';
 
+  /**
+   * Full path to the Battlesnake binary based on the platform.
+   * @type {string}
+   */
   const binaryPath = isWindows
     ? path.join(process.cwd(), 'battlesnake', 'battlesnake.exe')
     : path.join(process.cwd(), 'battlesnake', 'battlesnake-linux');
@@ -64,6 +86,7 @@ Promise.all(serverPromises).then((ports) => {
   if (!isWindows) {
     fs.chmodSync(binaryPath, '755');
   }
+
 
   // Configure the game with the specified board dimensions
   const playCommand = `${binaryPath} play -W ${boardWidth} -H ${boardHeight} ${args} -g standard --browser -d 100`;
