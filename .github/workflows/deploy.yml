@@ -11,6 +11,6 @@ jobs:
 
     steps:
       - name: Trigger Railway Deployment
-        uses: nikaro/actions-railway-deploy@v1
+        uses: nikaro/actions-railway-deploy@main
         with:
           railway_token: ${{ secrets.RAILWAY_TOKEN }}
