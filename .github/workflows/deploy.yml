@@ -10,7 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Railway Deployment
-        uses: nikaro/actions-railway-deploy@main
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+      - uses: actions/checkout@v3
+
+      - name: Install Railway CLI
+        run: npm install -g railway
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway login --apiKey $RAILWAY_TOKEN
+          railway up --detach
