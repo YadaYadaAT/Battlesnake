@@ -1,7 +1,7 @@
 # Battlesnake CI/CD Automation
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/YadaYadaAT/Battlesnake/ci.yml?branch=main)  
-![Lint Status](https://img.shields.io/github/actions/workflow/status/YadaYadaAT/Battlesnake/lint.yml?branch=main)
+[![Run Tests](https://github.com/YadaYadaAT/Battlesnake/actions/workflows/test.yml/badge.svg)](https://github.com/YadaYadaAT/Battlesnake/actions/workflows/test.yml)
+[![Lint Code](https://github.com/YadaYadaAT/Battlesnake/actions/workflows/lint.yml/badge.svg)](https://github.com/YadaYadaAT/Battlesnake/actions/workflows/lint.yml)
 
 Welcome to the **Battlesnake CI/CD Automation** repository! This project is part of our university coursework where we combine competitive game development with hands-on DevOps experience. Here, we build a Battlesnake bot and integrate modern development practices including continuous integration, continuous delivery, and agile issue tracking.
 
@@ -74,7 +74,8 @@ To launch the Battlesnake server locally:
 npm run dev --snakes <number-of-snakes>
 ```
 
-Replace `<number-of-snakes>` with an integer up to 6 to specify how many snake instances the server should simulate.
+Replace `<number-of-snakes>` with an integer up to 4 to specify how many snake instances the server should simulate.
+If you wish to add more snakes, you can do so by manually adding them in the 'info' function in handlers.js. However, we only recommend you do this for larger grid sizes.
 
 ---
 
