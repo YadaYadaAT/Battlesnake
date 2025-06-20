@@ -1,4 +1,32 @@
-const { AStar } = require('./pathfinding');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: handlers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: handlers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { AStar } = require('./pathfinding');
 
 /**
  * Returns snake customization info based on index.
@@ -90,13 +118,13 @@ function simulateMove(gameState, move) {
 
   // Check if food was eaten
   const foodEaten = newState.board.food.some(
-    (food) => food.x === newHead.x && food.y === newHead.y
+    (food) => food.x === newHead.x &amp;&amp; food.y === newHead.y
   );
 
   if (foodEaten) {
     // Remove eaten food
     newState.board.food = newState.board.food.filter(
-      (food) => !(food.x === newHead.x && food.y === newHead.y)
+      (food) => !(food.x === newHead.x &amp;&amp; food.y === newHead.y)
     );
     // Reset health and don't remove tail
     mySnake.health = 100;
@@ -136,7 +164,7 @@ function evaluateGameState(gameState) {
       (closest, food) => {
         const distance =
           Math.abs(food.x - myHead.x) + Math.abs(food.y - myHead.y);
-        return distance < closest.distance ? { food, distance } : closest;
+        return distance &lt; closest.distance ? { food, distance } : closest;
       },
       { distance: Infinity, food: null }
     );
@@ -152,11 +180,11 @@ function evaluateGameState(gameState) {
 
   // Factor 5: Safety from larger snakes (-50 to 0 points)
   gameState.board.snakes.forEach((snake) => {
-    if (snake.id !== mySnake.id && snake.body.length > mySnake.body.length) {
+    if (snake.id !== mySnake.id &amp;&amp; snake.body.length > mySnake.body.length) {
       const distance =
         Math.abs(snake.body[0].x - myHead.x) +
         Math.abs(snake.body[0].y - myHead.y);
-      if (distance <= 2) {
+      if (distance &lt;= 2) {
         score -= 25; // Penalize being close to larger snakes
       }
     }
@@ -295,7 +323,7 @@ countEscapeRoutes(pos) {
 
   for (const direction of directions) {
     const newPos = this.calculateNewPosition(pos, direction);
-    if (this.isValidPosition(newPos) && this.isPositionSafe(newPos)) {
+    if (this.isValidPosition(newPos) &amp;&amp; this.isPositionSafe(newPos)) {
       safeCount++;
     }
   }
@@ -315,7 +343,7 @@ isPositionSafe(pos) {
   // Check if position collides with any snake body segment
   for (const snake of this.board.snakes) {
     for (const segment of snake.body) {
-      if (segment.x === pos.x && segment.y === pos.y) {
+      if (segment.x === pos.x &amp;&amp; segment.y === pos.y) {
         return false;
       }
     }
@@ -338,9 +366,9 @@ isPositionSafe(pos) {
 
     // Determine health status
     let status = 'healthy';
-    if (health <= this.thresholds.criticalHealth) {
+    if (health &lt;= this.thresholds.criticalHealth) {
       status = 'critical';
-    } else if (health <= 50) {
+    } else if (health &lt;= 50) {
       status = 'low';
     }
 
@@ -354,7 +382,7 @@ isPositionSafe(pos) {
       status,
       health,
       length,
-      isCritical: health <= this.thresholds.criticalHealth,
+      isCritical: health &lt;= this.thresholds.criticalHealth,
       canHunt: health >= this.thresholds.huntingHealth
     };
   }
@@ -372,9 +400,9 @@ isPositionSafe(pos) {
 
     // Early return 0 if target is out of bounds (optional)
     if (
-      target.x < 0 ||
+      target.x &lt; 0 ||
       target.x >= this.board.width ||
-      target.y < 0 ||
+      target.y &lt; 0 ||
       target.y >= this.board.height
     ) {
       return 0;
@@ -427,7 +455,7 @@ isPositionSafe(pos) {
 
     // Calculate overall food access score
     const bestTarget = targets[0];
-    const isUrgent = this.mySnake.health <= this.thresholds.criticalHealth;
+    const isUrgent = this.mySnake.health &lt;= this.thresholds.criticalHealth;
     const score = bestTarget ? bestTarget.score * (isUrgent ? 1.2 : 1) : 0;
 
     return {
@@ -462,7 +490,7 @@ isPositionSafe(pos) {
       safeArea,
       centerDistance,
       escapeRoutes,
-      isTrapped: safeArea < this.thresholds.minSafeArea,
+      isTrapped: safeArea &lt; this.thresholds.minSafeArea,
       territoryScore
     };
   }
@@ -487,8 +515,8 @@ isPositionSafe(pos) {
       const threat = {
         snake: snake,
         distance,
-        isImmediate: distance <= this.thresholds.immediateThreat,
-        isPotential: distance <= this.thresholds.potentialThreat,
+        isImmediate: distance &lt;= this.thresholds.immediateThreat,
+        isPotential: distance &lt;= this.thresholds.potentialThreat,
         isDangerous: otherLength >= myLength,
         direction: this.calculateThreatDirection(myHead, otherHead)
       };
@@ -498,8 +526,8 @@ isPositionSafe(pos) {
 
     // Calculate threat score
     const threatScore = threats.reduce((score, threat) => {
-      if (threat.isImmediate && threat.isDangerous) return score - 0.3;
-      if (threat.isPotential && threat.isDangerous) return score - 0.1;
+      if (threat.isImmediate &amp;&amp; threat.isDangerous) return score - 0.3;
+      if (threat.isPotential &amp;&amp; threat.isDangerous) return score - 0.1;
       return score;
     }, 1);
 
@@ -534,8 +562,8 @@ isPositionSafe(pos) {
       wallDistance,
       centerDistance,
       escapeRoutes,
-      isCornered: escapeRoutes <= 1,
-      isCenter: centerDistance < 0.2
+      isCornered: escapeRoutes &lt;= 1,
+      isCenter: centerDistance &lt; 0.2
     };
   }
 
@@ -599,7 +627,7 @@ isPositionSafe(pos) {
     // Space-based recommendations
     if (factors.spaceControl.isTrapped) {
       evaluation.recommendations.push('Find escape route');
-    } else if (factors.spaceControl.territoryScore < 0.3) {
+    } else if (factors.spaceControl.territoryScore &lt; 0.3) {
       evaluation.recommendations.push('Expand territory');
     }
 
@@ -613,7 +641,7 @@ isPositionSafe(pos) {
     // Position-based recommendations
     if (factors.position.isCornered) {
       evaluation.recommendations.push('Move away from corner');
-    } else if (!factors.position.isCenter && factors.spaceControl.score > 0.7) {
+    } else if (!factors.position.isCenter &amp;&amp; factors.spaceControl.score > 0.7) {
       evaluation.recommendations.push('Consider moving toward center');
     }
   }
@@ -636,10 +664,10 @@ isPositionSafe(pos) {
 
   isValidPosition(pos) {
     return (
-      pos.x >= 0 &&
-      pos.x < this.board.width &&
-      pos.y >= 0 &&
-      pos.y < this.board.height
+      pos.x >= 0 &amp;&amp;
+      pos.x &lt; this.board.width &amp;&amp;
+      pos.y >= 0 &amp;&amp;
+      pos.y &lt; this.board.height
     );
   }
 
@@ -694,13 +722,13 @@ isPositionSafe(pos) {
     const areaScore = area / this.boardSize;
     const threatScore = threats.reduce((score, threat) => {
       if (
-        threat.distance <= this.thresholds.immediateThreat &&
+        threat.distance &lt;= this.thresholds.immediateThreat &amp;&amp;
         threat.isDangerous
       ) {
         return score - 0.3;
       }
       if (
-        threat.distance <= this.thresholds.potentialThreat &&
+        threat.distance &lt;= this.thresholds.potentialThreat &amp;&amp;
         threat.isDangerous
       ) {
         return score - 0.1;
@@ -712,10 +740,10 @@ isPositionSafe(pos) {
 }
 
 function filterBackwardsMove(possibleMoves, myHead, myNeck) {
-  if (myNeck.x < myHead.x) possibleMoves.left.safe = false;
+  if (myNeck.x &lt; myHead.x) possibleMoves.left.safe = false;
   else if (myNeck.x > myHead.x) possibleMoves.right.safe = false;
   else if (myNeck.y > myHead.y) possibleMoves.down.safe = false;
-  else if (myNeck.y < myHead.y) possibleMoves.up.safe = false;
+  else if (myNeck.y &lt; myHead.y) possibleMoves.up.safe = false;
 }
 
 function filterOutOfBoundsMoves(possibleMoves, boardWidth, boardHeight, myHead) {
@@ -723,9 +751,9 @@ function filterOutOfBoundsMoves(possibleMoves, boardWidth, boardHeight, myHead) 
     const move = possibleMoves[i];
     const newPos = calculateNewPosition(myHead, move);
     if (
-      newPos.x < 0 ||
+      newPos.x &lt; 0 ||
       newPos.x >= boardWidth ||
-      newPos.y < 0 ||
+      newPos.y &lt; 0 ||
       newPos.y >= boardHeight
     ) {
       possibleMoves.splice(i, 1);
@@ -737,7 +765,7 @@ function filterCollisions(possibleMoves, gameState) {
   // Collide with own body
   gameState.you.body.forEach((part) => {
     Object.values(possibleMoves).forEach((move) => {
-      if (move.x === part.x && move.y === part.y) move.safe = false;
+      if (move.x === part.x &amp;&amp; move.y === part.y) move.safe = false;
     });
   });
 
@@ -745,7 +773,7 @@ function filterCollisions(possibleMoves, gameState) {
   gameState.board.snakes.forEach((snake) => {
     snake.body.forEach((part) => {
       Object.values(possibleMoves).forEach((move) => {
-        if (move.x === part.x && move.y === part.y) move.safe = false;
+        if (move.x === part.x &amp;&amp; move.y === part.y) move.safe = false;
       });
     });
   });
@@ -757,18 +785,18 @@ function filterTailCollision(possibleMoves, gameState) {
     snake.body.forEach((part, idx, arr) => {
       const isTail = idx === arr.length - 1;
       Object.values(possibleMoves).forEach((move) => {
-        const same = move.x === part.x && move.y === part.y;
-        if (!isMe && isTail) {
+        const same = move.x === part.x &amp;&amp; move.y === part.y;
+        if (!isMe &amp;&amp; isTail) {
           const head = snake.body[0];
           const willEat = gameState.board.food.some(
             (f) =>
-              (Math.abs(f.x - head.x) === 1 && f.y === head.y) ||
-              (Math.abs(f.y - head.y) === 1 && f.x === head.x)
+              (Math.abs(f.x - head.x) === 1 &amp;&amp; f.y === head.y) ||
+              (Math.abs(f.y - head.y) === 1 &amp;&amp; f.x === head.x)
           );
-          if (willEat && same) move.safe = false;
+          if (willEat &amp;&amp; same) move.safe = false;
           return;
         }
-        if (!isMe && same) move.safe = false;
+        if (!isMe &amp;&amp; same) move.safe = false;
       });
     });
   });
@@ -789,7 +817,7 @@ function filterHeadToHeadCollision(possibleMoves, gameState) {
         { x: otherHead.x, y: otherHead.y - 1 }
       ];
       adjacentCells.forEach((cell) => {
-        if (move.x === cell.x && move.y === cell.y && myLength <= otherLength) {
+        if (move.x === cell.x &amp;&amp; move.y === cell.y &amp;&amp; myLength &lt;= otherLength) {
           move.safe = false;
         }
       });
@@ -825,11 +853,11 @@ function chooseMoveTowardFood(gameState, myHead, safeMoves, possibleMoves) {
   const foods = gameState.board.food.map((food) => {
     const distanceX = Math.abs(myHead.x - food.x);
     const distanceY = Math.abs(myHead.y - food.y);
-    const xDir = myHead.x < food.x ? 'right' : 'left';
-    const yDir = myHead.y < food.y ? 'up' : 'down';
+    const xDir = myHead.x &lt; food.x ? 'right' : 'left';
+    const yDir = myHead.y &lt; food.y ? 'up' : 'down';
 
     let primaryDirection, secondaryDirection;
-    if (distanceX < distanceY) {
+    if (distanceX &lt; distanceY) {
       primaryDirection = distanceX === 0 ? yDir : xDir;
       secondaryDirection = distanceX === 0 ? 'none' : yDir;
     } else {
@@ -950,9 +978,9 @@ function move(gameState) {
  */
 function getMoveDirection(current, next) {
   if (next.x > current.x) return 'right';
-  if (next.x < current.x) return 'left';
+  if (next.x &lt; current.x) return 'left';
   if (next.y > current.y) return 'up';
-  if (next.y < current.y) return 'down';
+  if (next.y &lt; current.y) return 'down';
   return null;
 }
 
@@ -974,11 +1002,11 @@ function floodFill(board, start) {
   }
 
   function isValid(x, y) {
-    if (x < 0 || x >= width || y < 0 || y >= height) return false;
+    if (x &lt; 0 || x >= width || y &lt; 0 || y >= height) return false;
     if (visited.has(key(x, y))) return false;
     for (const snake of board.snakes) {
       for (const part of snake.body) {
-        if (part.x === x && part.y === y) return false;
+        if (part.x === x &amp;&amp; part.y === y) return false;
       }
     }
     return true;
@@ -1023,7 +1051,7 @@ function findNearbySmallerSnakes(gameState, myHead, detectionRadius = 5) {
       Math.abs(snakeHead.x - myHead.x) + Math.abs(snakeHead.y - myHead.y);
 
     // Only consider snakes within detection radius
-    if (distance <= detectionRadius) {
+    if (distance &lt;= detectionRadius) {
       nearbySnakes.push({
         snake,
         head: snakeHead,
@@ -1071,7 +1099,7 @@ function isGoodHuntingMove(move, targetSnake, gameState) {
     Math.abs(myHead.y - targetSnake.head.y);
 
   // Move is good if it gets us closer to the target
-  return currentDistance < currentDistanceToTarget;
+  return currentDistance &lt; currentDistanceToTarget;
 }
 
 exports.info = info;
@@ -1087,3 +1115,26 @@ exports.filterHeadToHeadCollision = filterHeadToHeadCollision;
 exports.getSafeMoves = getSafeMoves;
 exports.chooseMoveTowardFood = chooseMoveTowardFood;
 exports.getMoveDirection = getMoveDirection;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GameStateEvaluator.html">GameStateEvaluator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculatePossibleMoves">calculatePossibleMoves</a></li><li><a href="global.html#end">end</a></li><li><a href="global.html#evaluateGameState">evaluateGameState</a></li><li><a href="global.html#findNearbySmallerSnakes">findNearbySmallerSnakes</a></li><li><a href="global.html#floodFill">floodFill</a></li><li><a href="global.html#getMoveDirection">getMoveDirection</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#isGoodHuntingMove">isGoodHuntingMove</a></li><li><a href="global.html#lookAhead">lookAhead</a></li><li><a href="global.html#simulateMove">simulateMove</a></li><li><a href="global.html#start">start</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Jun 20 2025 20:01:22 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

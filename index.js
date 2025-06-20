@@ -1,12 +1,12 @@
 /**
  * Battlesnake Server Startup
- * 
+ *
  * This file handles starting the Battlesnake server with configurable map sizes.
  * Map sizes can be specified as command line arguments:
  * - argv[2]: Number of snakes (default: 1)
  * - argv[3]: Board width (default: 11)
  * - argv[4]: Board height (default: 11)
- * 
+ *
  * Example usage:
  * - Standard 11x11 board: node index.js 1
  * - Small 7x7 board: node index.js 1 7 7
@@ -22,7 +22,7 @@ const handlers = require('./handlers');
 
 // Parse command line arguments for game configuration
 const numSnakes = Number(process.argv[2]) || 1;
-const boardWidth = Number(process.argv[3]) || 11;  // Default to standard 11x11 board
+const boardWidth = Number(process.argv[3]) || 11; // Default to standard 11x11 board
 const boardHeight = Number(process.argv[4]) || 11; // Default to standard 11x11 board
 
 /**
@@ -87,11 +87,12 @@ Promise.all(serverPromises).then((ports) => {
     fs.chmodSync(binaryPath, '755');
   }
 
-
   // Configure the game with the specified board dimensions
   const playCommand = `${binaryPath} play -W ${boardWidth} -H ${boardHeight} ${args} -g standard --browser -d 100`;
 
-  console.log(`🐍 Starting Battlesnake with board size ${boardWidth}x${boardHeight}`);
+  console.log(
+    `🐍 Starting Battlesnake with board size ${boardWidth}x${boardHeight}`
+  );
   exec(playCommand, (error, stdout, stderr) => {
     if (error) {
       console.error(`❌ Execution error: ${error.message}`);
